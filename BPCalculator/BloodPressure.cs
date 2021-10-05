@@ -31,7 +31,7 @@ namespace BPCalculator
             get
             {
                 // implement as part of project
-                throw new NotImplementedException("not implemented yet");        
+                throw new NotImplementedException("JG - not implemented yet");        
             }
         }
     }
