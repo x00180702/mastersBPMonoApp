@@ -22,16 +22,8 @@ jobs:
           dotnet-version: '5.0.x'
           include-prerelease: true
           
-        # create NuGet package
-      - name: Package for NuGet
-        run: dotnet pack /p:PackageVersion=1.0.0 --configuration Release --output .
-
-      # upload NuGet Package
-      - name: Upload Nuget package as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: NuGet package
-          path: ./*.nupkg
+      - name: Install dependencies
+        run: dotnet restore
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
