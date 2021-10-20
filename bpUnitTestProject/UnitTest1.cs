@@ -17,7 +17,7 @@ namespace bpUnitTestProject
         [InlineData(70,40)] //low range
         [InlineData(82,48)] //mid range
         [InlineData(89,59)] //high range
-        public void TestMethod1()
+        public void TestMethod1(int s, int d)
         {
       
             BP = new BloodPressure() { Systolic = s, Diastolic = d };
