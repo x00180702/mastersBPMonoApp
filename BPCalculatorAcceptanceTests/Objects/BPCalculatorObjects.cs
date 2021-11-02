@@ -30,8 +30,7 @@ namespace BPCalculatorAcceptanceTests.PageObjects
         private IWebElement systolicElement => _webDriver.FindElement(By.CssSelector("input[id='BP_Systolic']"));
         private IWebElement diastolicElement => _webDriver.FindElement(By.CssSelector("input[id='BP_Diastolic']"));
         private IWebElement submitButtonElement => _webDriver.FindElement(By.CssSelector("input[value='Submit']"));
-        //private IWebElement resultElement => _webDriver.FindElement(By.CssSelector("label[id='results']"));
-        private IWebElement resultElement => _webDriver.FindElement(By.CssSelector("div[class=form-group]:nth-of-type(4)"));
+        private IWebElement resultElement => _webDriver.FindElement(By.CssSelector("label[id='results']"));
         private IWebElement ResetButtonElement => _webDriver.FindElement(By.Id("reset-button"));
 
         public void enterSystolicNumber(string number)
