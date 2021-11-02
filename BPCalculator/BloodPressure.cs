@@ -45,7 +45,7 @@ namespace BPCalculator
                     return BPCategory.PreHigh;
                 }
                 else
-                if ((Systolic > 140 && Systolic <= 190 || Diastolic > 90 && Diastolic <= 100))
+                if ((Systolic >= 140 && Systolic <= 190 || Diastolic >= 90 && Diastolic <= 100))
                     {
                     return BPCategory.High;
                 }

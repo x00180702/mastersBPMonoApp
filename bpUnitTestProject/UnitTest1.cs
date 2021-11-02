@@ -7,6 +7,8 @@ namespace bpUnitTestProject
     public class UnitTest1
     {
         public BloodPressure BP;
+
+        //Unit test to check LOW blood pressure
         [Theory]
         [InlineData(70,40)] //low range
         [InlineData(82,48)] //mid range
@@ -19,6 +21,7 @@ namespace bpUnitTestProject
 
         }
 
+        //Unit test to check IDEAL blood pressure
         [Theory]
         [InlineData(90, 60)] //low range
         [InlineData(105, 62)] //mid range
@@ -28,6 +31,32 @@ namespace bpUnitTestProject
 
             BP = new BloodPressure() { Systolic = s, Diastolic = d };
             Assert.Equal(BPCategory.Ideal, BP.Category);
+
+        }
+
+        //Unit test to check IDEAL blood pressure
+        [Theory]
+        [InlineData(120, 80)] //low range
+        [InlineData(134, 86)] //mid range
+        [InlineData(139, 89)] //high range
+        public void TestMethodPreHighlVariables(int s, int d)
+        {
+
+            BP = new BloodPressure() { Systolic = s, Diastolic = d };
+            Assert.Equal(BPCategory.PreHigh, BP.Category);
+
+        }
+
+        //Unit test to check IDEAL blood pressure
+        [Theory]
+        [InlineData(140, 90)] //low range
+        [InlineData(173, 97)] //mid range
+        [InlineData(190, 100)] //high range
+        public void TestMethodHighVariables(int s, int d)
+        {
+
+            BP = new BloodPressure() { Systolic = s, Diastolic = d };
+            Assert.Equal(BPCategory.High, BP.Category);
 
         }
     }

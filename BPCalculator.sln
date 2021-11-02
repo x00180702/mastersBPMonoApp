@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPCalculator", "BPCalculator\BPCalculator.csproj", "{5966DA6C-819D-4303-ADC7-425B8541EC84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bpUnitTestProject", "bpUnitTestProject\bpUnitTestProject.csproj", "{4A952892-6511-4DB7-AD11-386B73AC3D79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bpUnitTestProject", "bpUnitTestProject\bpUnitTestProject.csproj", "{4A952892-6511-4DB7-AD11-386B73AC3D79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPCalculatorAcceptanceTests", "BPCalculatorAcceptanceTests\BPCalculatorAcceptanceTests.csproj", "{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{4A952892-6511-4DB7-AD11-386B73AC3D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A952892-6511-4DB7-AD11-386B73AC3D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A952892-6511-4DB7-AD11-386B73AC3D79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
