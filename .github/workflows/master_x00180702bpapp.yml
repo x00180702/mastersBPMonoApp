@@ -38,6 +38,16 @@ jobs:
           path: '**.trx'
           reporter: 'dotnet-trx'    
 
+    # Run Selenium tests
+      - name: Run Selenium tests
+        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
+  
+    # Upload results of selenium tests
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Selenium Tests Results
+          path: TestResults/selenium.trx
+
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
