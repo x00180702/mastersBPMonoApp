@@ -1,4 +1,5 @@
 ﻿using BPCalculatorAcceptanceTests.PageObjects;
+using BPCalculatorAcceptanceTests.Drivers;
 using TechTalk.SpecFlow;
 using NUnit.Framework;
 
@@ -9,6 +10,11 @@ namespace BPCalculatorAcceptanceTests.Steps
     {
 
         private readonly BPCalculatorObjects _calculatorPageObject;
+
+        public BloodPressureCalcultorTestsSteps(browserDrivers browserDriver)
+        {
+            _calculatorPageObject = new BPCalculatorObjects(browserDriver.Current);
+        }
 
         [Given(@"is on the Blood Pressure Calcultor Page")]
         public void GivenIsOnTheBloodPressureCalcultorPage()
