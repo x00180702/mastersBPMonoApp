@@ -1,5 +1,5 @@
 import { check, sleep } from "k6";
-import http from "k6/http";
+import http from "k6/http ";
 
 // Export an options object to configure how k6 will behave during test execution.
 //
