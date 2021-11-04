@@ -27,6 +27,19 @@ jobs:
      #Install app dependencies     
       - name: Install dependencies
         run: dotnet restore
+        
+      - name: Sonarscanner for dotnet
+        uses: Secbyte/dotnet-sonarscanner@v2.3
+        with:
+          buildCommand: dotnet build .
+          projectKey: Bank_CI_GA
+          projectName: Bank_CI_GA
+          sonarOrganisation: sonarcloudorg-gc
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+        
+        
     # Run Unit tests
       - name: Build with dotnet
         run: dotnet build --configuration Release
@@ -40,15 +53,6 @@ jobs:
           name: MS Tests                  
           path: '**.trx'
           reporter: 'dotnet-trx'  
-
-    #Run performance test
-      - name: Pull Docker image for k6
-        run: docker pull loadimpact/k6
-      - name: Run k6 load test, capture report
-        run: docker run -i loadimpact/k6 run - <k6tests/perf2.js > k6report.txt
-
-      - uses: actions/upload-artifact@v2
-
           
   deploy_test_blue_green:                                             
     name: deploy to staging slot, run E2E tests, swap slots
