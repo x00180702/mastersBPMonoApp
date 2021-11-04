@@ -95,7 +95,3 @@ export default function () {
     // "think" for 3 seconds
     sleep(3);
 }
-
-// to run on Docker:
-// docker pull loadimpact/k6
-// docker run -i loadimpact/k6 run - <perf2.js
