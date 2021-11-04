@@ -27,17 +27,19 @@ jobs:
      #Install app dependencies     
       - name: Install dependencies
         run: dotnet restore
-        
-      - name: Sonarscanner for dotnet
-        uses: Secbyte/dotnet-sonarscanner@v2.3
+      
+  sonarcloud:
+    name: SonarCloud
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
         with:
-          buildCommand: dotnet build .
-          projectKey: Bank_CI_GA
-          projectName: Bank_CI_GA
-          sonarOrganisation: sonarcloudorg-gc
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN:  ${{ secrets.SONAR_TOKEN }}
         
         
     # Run Unit tests
