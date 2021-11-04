@@ -27,46 +27,18 @@ jobs:
      #Install app dependencies     
       - name: Install dependencies
         run: dotnet restore
-      
-  build:
-    name: Build
-    runs-on: windows-latest
-    steps:
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        
+      - name: Sonarscanner for dotnet
+        uses: Secbyte/dotnet-sonarscanner@v2.3
         with:
-          java-version: 1.11
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v1
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v1
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
-      - name: Install SonarCloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
-        run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      - name: Build and analyze
+          buildCommand: dotnet build .
+          projectKey: Bank_CI_GA
+          projectName: Bank_CI_GA
+          sonarOrganisation: sonarcloudorg-gc
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: powershell
-        run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"x00180702_bp" /o:"x00180702" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          commit
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+        
         
     # Run Unit tests
       - name: Build with dotnet
@@ -83,68 +55,67 @@ jobs:
           reporter: 'dotnet-trx'  
           
   deploy_test_blue_green:                                             
-      name: deploy to staging slot, run E2E tests, swap slots
-      needs: build_unit_test
-      
-  environment:
+    name: deploy to staging slot, run E2E tests, swap slots
+    needs: build_unit_test
+    environment:
       name: Production
       url: https://x00180702bpapp.azurewebsites.net                                
-      runs-on: windows-latest
-      env:
+    runs-on: windows-latest
+    env:
       AZURE_WEBAPP_NAME: bpCalculator            		# set this to your application's name
       AZURE_WEBAPP_PACKAGE_PATH: 'publish'              # set this to the path to your web app project
-      steps:
-      - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
     # publish web app ready for deployment
-      - name: Publish web app
-        run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
+    - name: Publish web app
+      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
     
     # Deploy to Azure app service to staging slot using publish profile for staging slot
-      - name: Run Azure webapp deploy action using publish profile credentials
-        uses: azure/webapps-deploy@v2
-        with: 
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}                            
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}     # Define secret variable in environment
-          slot-name: staging
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+    - name: Run Azure webapp deploy action using publish profile credentials
+      uses: azure/webapps-deploy@v2
+      with: 
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}                            
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}     # Define secret variable in environment
+        slot-name: staging
+        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
 
     # Run Selenium tests
-      - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
+    - name: Run Selenium tests
+      run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
   
     # Upload results of selenium tests
-      - uses: actions/upload-artifact@v2
-        with:
+    - uses: actions/upload-artifact@v2
+      with:
           name: Selenium Tests Results
           path: TestResults/selenium.trx
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+    - name: dotnet publish
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+      with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-        runs-on: windows-latest
-        needs: build_unit_test
-          environment:
-        name: 'Production'
-        url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    runs-on: windows-latest
+    needs: build_unit_test
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-  steps:
-        - name: Download artifact from build job
-          uses: actions/download-artifact@v2
-          with:
-            name: .net-app
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app
 
-        - name: Deploy to Azure Web App
-          id: deploy-to-webapp
-          uses: azure/webapps-deploy@v2
-          with:
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
           app-name: 'x00180702bpApp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9E24F950BAA4BE0869EBE670F1528A7 }}
