@@ -16,7 +16,7 @@ on:
 jobs:
   build_unit_test:  
     name: build and unit test
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up .NET Core
@@ -24,6 +24,7 @@ jobs:
         with:
           dotnet-version: '5.0.x'
           include-prerelease: true
+          
      #Install app dependencies     
       - name: Install dependencies
         run: dotnet restore
@@ -32,8 +33,8 @@ jobs:
         uses: Secbyte/dotnet-sonarscanner@v2.3
         with:
           buildCommand: dotnet build .
-          projectKey: Bank_CI_GA
-          projectName: Bank_CI_GA
+          projectKey: x00180702_bp
+          projectName: x00180702_bp
           sonarOrganisation: sonarcloudorg-gc
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
