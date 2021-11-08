@@ -81,7 +81,7 @@ jobs:
       url: https://x00180702bpapp-Testing.azurewebsites.net                               
     runs-on: ubuntu-latest
     env:
-      AZURE_WEBAPP_NAME: bpCalculator            		# set this to your application's name
+      AZURE_WEBAPP_NAME: x00180702bpApp            		# set this to your application's name
       AZURE_WEBAPP_PACKAGE_PATH: 'publish'              # set this to the path to your web app project
     steps:
     - uses: actions/checkout@v2
