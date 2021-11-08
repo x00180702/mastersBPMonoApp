@@ -98,5 +98,5 @@ export default function () {
 }
 
 
- docker pull loadimpact/k6
+ docker pull loadimpact/k6;
  docker run -i loadimpact/k6 run - <performanceTestScript.js
