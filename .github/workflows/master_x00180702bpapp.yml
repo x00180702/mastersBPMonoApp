@@ -57,6 +57,24 @@ jobs:
           path: '**.trx'
           reporter: 'dotnet-trx'  
           
+  k6_load_test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Pull Docker image for k6
+      run: docker pull loadimpact/k6
+
+    - name: Run k6 load test, capture report
+      run: docker run -i loadimpact/k6 run - <k6tests/perf2.js > k6report.txt
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: k6report
+        path: k6report.txt
+          
   deploy_test_blue_green:                                             
     name: deploy to staging slot, run E2E tests, swap slots
     needs: build_unit_test
