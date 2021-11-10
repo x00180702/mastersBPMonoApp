@@ -88,19 +88,18 @@ jobs:
 
     # Run Selenium tests
     - name: Run Selenium tests
-      run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
+      run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp/SeleniumTest.dll /Settings:SeleniumTest.runsettings --logger:"trx;LogFileName=selenium.trx"
   
     # Upload results of selenium tests
     - uses: actions/upload-artifact@v2
       with:
-          name: Selenium Tests Results
-          path: TestResults/selenium.trx
+        name: Selenium Tests Results
+        path: TestResults/selenium.trx
 
-    - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+# Deploy to Azure Web apps
+    - name: Run Azure webapp deploy action using publish profile credentials
+      uses: azure/webapps-deploy@v2
+      with: 
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}                        # your app name
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
+        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
