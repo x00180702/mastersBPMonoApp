@@ -72,20 +72,7 @@ jobs:
       with:
         name: k6report
         path: k6report.txt
-          
-  deploy_test_blue_green:                                             
-    name: deploy to staging slot, run E2E tests, swap slots
-    needs: build_unit_test
-    environment:
-      name: Testing
-      url: https://x00180702bpapp-Testing.azurewebsites.net                               
-    runs-on: ubuntu-latest
-    env:
-      AZURE_WEBAPP_NAME: x00180702bpApp            		# set this to your application's name
-      AZURE_WEBAPP_PACKAGE_PATH: 'publish'              # set this to the path to your web app project
-    steps:
-    - uses: actions/checkout@v2
-
+                                                     
     # publish web app ready for deployment
     - name: Publish web app
       run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
@@ -117,25 +104,3 @@ jobs:
       with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build_unit_test
-    environment:
-      name: 'Production'
-      url: https://x00180702bpapp.azurewebsites.net 
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: .net-app
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'x00180702bpApp'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9E24F950BAA4BE0869EBE670F1528A7 }}
-          package: .
