@@ -116,6 +116,15 @@ jobs:
           name: Selenium Tests Results
           path: TestResults/selenium.trx
 
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
 # Deploy to Azure Web apps
       - name: Run Azure webapp deploy action using publish profile credentials
         uses: azure/webapps-deploy@v2
