@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
 
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
@@ -46,8 +49,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           
     # Run Unit tests
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
       - name: Run unit tests
         run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
         
