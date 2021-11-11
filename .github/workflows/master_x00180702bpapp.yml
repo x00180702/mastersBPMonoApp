@@ -15,10 +15,8 @@ on:
 
 jobs:
   build_unit_test:  
-    name: build and unit test
     runs-on: ubuntu-latest
-    
-    
+   
     steps:
       - uses: actions/checkout@v2
       
@@ -27,13 +25,23 @@ jobs:
         with:
           dotnet-version: '5.0.x'
           include-prerelease: true
-          
-       #Install app dependencies     
+              
       - name: Install dependencies
         run: dotnet restore
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+        
+      - name: Run unit tests
+        run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
+
+      - name: Publish Unit Test Results
+        uses: dorny/test-reporter@v1
+        with:
+          artifact: ''
+          name: MS Tests                  
+          path: '**.trx'
+          reporter: 'dotnet-trx'  
 
   sonarcloud:
     name: SonarCloud
@@ -47,20 +55,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
-    # Run Unit tests
-      - name: Run unit tests
-        run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
-        
-    # Publish Unit test results
-      - name: Publish Unit Test Results
-        uses: dorny/test-reporter@v1
-        with:
-          artifact: ''
-          name: MS Tests                  
-          path: '**.trx'
-          reporter: 'dotnet-trx'  
-          
+                    
   k6_load_test:
     runs-on: ubuntu-latest
 
@@ -77,25 +72,19 @@ jobs:
         name: k6report
         path: k6report.txt
 
-  selenium_test:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
-  
-    # Upload results of selenium tests
-      - uses: actions/upload-artifact@v2
-        with:
+    - name: Run Selenium tests
+      run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
+    - uses: actions/upload-artifact@v2
+      with:
           name: Selenium Tests Results
           path: TestResults/selenium.trx
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+    - name: dotnet publish
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+      with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
