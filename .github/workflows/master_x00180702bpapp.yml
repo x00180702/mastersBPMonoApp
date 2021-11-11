@@ -106,24 +106,24 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2E47B3C71B914C9094927E3EBB0EFCD1 }}
           package: .
 
-    # Run Selenium tests
-      - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
+#     # Run Selenium tests
+#       - name: Run Selenium tests
+#         run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
   
-    # Upload results of selenium tests
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Selenium Tests Results
-          path: TestResults/selenium.trx
+#     # Upload results of selenium tests
+#       - uses: actions/upload-artifact@v2
+#         with:
+#           name: Selenium Tests Results
+#           path: TestResults/selenium.trx
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+#       - name: dotnet publish
+#         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+#       - name: Upload artifact for deployment job
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: .net-app
+#           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
