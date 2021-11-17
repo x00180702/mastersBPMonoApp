@@ -1,5 +1,9 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - x00180702bpApp
 
+env:
+  AZURE_WEBAPP_NAME: BloodPressureCalculator            # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: 'publish'              # set this to the path to your web app project
+
 on:
   push:
     branches:
@@ -12,21 +16,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.x'
-          include-prerelease: true
           
-      - name: Install dependencies
-        run: dotnet restore
-
-      - name: Build with dotnet
+      - name: Build for Release
         run: dotnet build --configuration Release
       - name: Run unit tests
         run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
-   
+
+      - name: Install dependencies
+        run: dotnet restore
+        
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
         with:
@@ -35,77 +37,13 @@ jobs:
           path: '**.trx'
           reporter: 'dotnet-trx'   
 
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  k6_load_test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Pull Docker image for k6
-      run: docker pull loadimpact/k6
-
-    - name: Run k6 load test, capture report
-      run: docker run -i loadimpact/k6 run - <k6Tests/performanceTestScript.js > k6report.txt
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: k6report
-        path: k6report.txt
-
-  selenium_tests:
-    name: selenium_tests
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    # Run Selenium tests
-    - name: Run Selenium tests
-      run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
-  
-    # Upload results of selenium tests
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Selenium Tests Results
-        path: TestResults/selenium.trx
-
-    - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-        name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: selenium_tests
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: .net-app
+      - name: Run unit tests
+        run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'x00180702bpApp'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2E47B3C71B914C9094927E3EBB0EFCD1 }}
-          package: .
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}                        # your app name
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
