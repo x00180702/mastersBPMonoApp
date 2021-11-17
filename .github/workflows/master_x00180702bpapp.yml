@@ -64,6 +64,10 @@ jobs:
         name: k6report
         path: k6report.txt
 
+  selenium_tests:
+    name: selenium_tests
+    runs-on: ubuntu-latest
+    steps:
     # Run Selenium tests
     - name: Run Selenium tests
       run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
@@ -85,7 +89,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: selenium_tests
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
