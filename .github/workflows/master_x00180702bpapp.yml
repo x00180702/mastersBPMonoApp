@@ -16,19 +16,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.x'
+          include-prerelease: true
+          
+      - name: Install dependencies
+        run: dotnet restore
           
       - name: Build for Release
         run: dotnet build --configuration Release
       - name: Run unit tests
         run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
 
-      - name: Install dependencies
-        run: dotnet restore
-        
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
         with:
@@ -37,13 +39,33 @@ jobs:
           path: '**.trx'
           reporter: 'dotnet-trx'   
 
-      - name: Run unit tests
-        run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+          
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}                        # your app name
+          slot-name: 'Production'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/BPCalculator'
+          package: .
