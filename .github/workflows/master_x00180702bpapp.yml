@@ -67,6 +67,7 @@ jobs:
   selenium_tests:
     name: selenium_tests
     runs-on: ubuntu-latest
+    needs: build
     steps:
     # Run Selenium tests
     - name: Run Selenium tests
