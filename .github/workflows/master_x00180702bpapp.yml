@@ -1,8 +1,7 @@
-name: Build and deploy ASP.Net Core app to Azure Web App - x00180702bpApp
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
-env:
-  AZURE_WEBAPP_NAME: bloodpressurecalculator            # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: 'publish'              # set this to the path to your web app project
+name: Build and deploy ASP.Net Core app to Azure Web App - x00180702bpApp
 
 on:
   push:
@@ -16,7 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -25,70 +24,70 @@ jobs:
           
       - name: Install dependencies
         run: dotnet restore
-          
-      - name: Build for Release
+
+      - name: Build with dotnet
         run: dotnet build --configuration Release
       - name: Run unit tests
         run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
-
+        
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
         with:
           artifact: ''
           name: MS Tests                  
           path: '**.trx'
-          reporter: 'dotnet-trx'  
-                     
+          reporter: 'dotnet-trx' 
+          
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
-    needs: build
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
-    # Run Selenium tests
-      - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj  --verbosity normal -l:trx
-  
-    # Upload results of selenium tests
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Selenium Tests Results
-          path: TestResults/selenium.trx
+    - uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting for sonarcloud
+        fetch-depth: 0
+    - name: Setup .Net SDK (v5.0)
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.100'
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --blame --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=opencover.xml
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+  k6_load_test:
+    runs-on: ubuntu-latest
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+    steps:
+    - uses: actions/checkout@v2
+    - name: Pull Docker image for k6
+      run: docker pull loadimpact/k6
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+    - name: Run k6 load test, capture report
+      run: docker run -i loadimpact/k6 run - <k6Tests/performanceTestScript.js > k6report.txt
 
-       
+    - uses: actions/upload-artifact@v2
+      with:
+        name: k6report
+        path: k6report.txt
+        
+        
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
@@ -99,8 +98,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}                        # your app name
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}  
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3AC970EAC1F9407085209D3BC4BD1A8C  }} # Define secret variable in repository settings as per action documentation
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3AC970EAC1F9407085209D3BC4BD1A8C }}
           package: .
-      
