@@ -38,6 +38,9 @@ jobs:
           path: '**.trx'
           reporter: 'dotnet-trx'    
 
+  selenium:
+    runs-on: ubuntu-latest
+    steps:
     # Run Selenium tests
       - name: Run Selenium tests
         run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
