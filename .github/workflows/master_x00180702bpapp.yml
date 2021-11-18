@@ -78,12 +78,34 @@ jobs:
       with:
         name: k6report
         path: k6report.txt
-        
-        
+
+  selenium_test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    # Run Selenium tests
+      - name: Run Selenium tests
+        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
+  
+    # Upload results of selenium tests
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Selenium Tests Results
+          path: TestResults/selenium.trx
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp        
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: selenium_test
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
