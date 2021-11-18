@@ -1,5 +1,4 @@
 ﻿Feature: Blood Pressure Calcultor Tests
-	Selenium tests for BP Calculator
 
 @test
 Scenario: Check details
