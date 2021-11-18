@@ -30,31 +30,51 @@ jobs:
       - name: Run unit tests
         run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
         
-      - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
-   
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
         with:
           artifact: ''
           name: MS Tests                  
           path: '**.trx'
-          reporter: 'dotnet-trx'    
+          reporter: 'dotnet-trx' 
           
-    # Upload results of selenium tests
-      - uses: actions/upload-artifact@v2
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
         with:
-          name: Selenium Tests Results
-          path: TestResults/selenium.trx
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+          java-version: 1.11
+      - uses: actions/checkout@v2
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: pwsh
+        run: |
+          .\sonarcloud.ps1 -sonarSecret ${{ secrets.SONAR_TOKEN }}
+
+
+  k6_load_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Pull Docker image for k6
+      run: docker pull loadimpact/k6
+
+    - name: Run k6 load test, capture report
+      run: docker run -i loadimpact/k6 run - <k6Tests/performanceTestScript.js > k6report.txt
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: k6report
+        path: k6report.txt
+        
+        
 
   deploy:
     runs-on: ubuntu-latest
