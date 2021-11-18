@@ -15,64 +15,64 @@ namespace BPCalculatorAcceptanceTests.Features
     using TechTalk.SpecFlow;
     using System;
     using System.Linq;
-
-
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Blood Pressure Calcultor Tests")]
     public partial class BloodPressureCalcultorTestsFeature
     {
-
+        
         private TechTalk.SpecFlow.ITestRunner testRunner;
-
+        
         private string[] _featureTags = ((string[])(null));
-
+        
 #line 1 "Calculator.feature"
 #line hidden
-
+        
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Blood Pressure Calcultor Tests", "\tSelenium tests for BP Calculator", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Blood Pressure Calcultor Tests", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
-
+        
         [NUnit.Framework.OneTimeTearDownAttribute()]
         public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
-
+        
         [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
-
+        
         [NUnit.Framework.TearDownAttribute()]
         public virtual void TestTearDown()
         {
             testRunner.OnScenarioEnd();
         }
-
+        
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
-
+        
         public virtual void ScenarioStart()
         {
             testRunner.OnScenarioStart();
         }
-
+        
         public virtual void ScenarioCleanup()
         {
             testRunner.CollectScenarioErrors();
         }
-
+        
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Check details")]
         [NUnit.Framework.CategoryAttribute("test")]
@@ -82,8 +82,8 @@ namespace BPCalculatorAcceptanceTests.Features
                     "test"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Check details", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 5
-            this.ScenarioInitialize(scenarioInfo);
+#line 4
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
             bool isFeatureIgnored = default(bool);
@@ -102,21 +102,21 @@ namespace BPCalculatorAcceptanceTests.Features
             else
             {
                 this.ScenarioStart();
+#line 5
+ testRunner.Given("is on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
 #line 6
-                testRunner.Given("is on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.And("the user enters 70 in the Systolic field on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 7
-                testRunner.And("the user enters 70 in the Systolic field on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the user enters 40 in the Diastolic field on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 8
-                testRunner.And("the user enters 40 in the Diastolic field on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("the clicks on the submit button on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 9
-                testRunner.When("the clicks on the submit button on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 10
-                testRunner.Then("the result Low Blood Pressure will be diplayed on the Blood Pressure Calcultor Pa" +
-                                       "ge", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the result Low Blood Pressure will be diplayed on the Blood Pressure Calcultor Pa" +
+                        "ge", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
