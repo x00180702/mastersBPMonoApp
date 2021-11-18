@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPCalculator", "BPCalculato
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bpUnitTestProject", "bpUnitTestProject\bpUnitTestProject.csproj", "{4A952892-6511-4DB7-AD11-386B73AC3D79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPCalculatorAcceptanceTests", "BPCalculatorAcceptanceTests\BPCalculatorAcceptanceTests.csproj", "{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k6Tests", "k6Tests", "{882C12CE-B8B8-466C-B6BC-4DB5E9AC112F}"
 	ProjectSection(SolutionItems) = preProject
 		performanceTestScript.js = performanceTestScript.js
@@ -28,10 +26,6 @@ Global
 		{4A952892-6511-4DB7-AD11-386B73AC3D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A952892-6511-4DB7-AD11-386B73AC3D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A952892-6511-4DB7-AD11-386B73AC3D79}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3B7C12F-EC11-46AE-9535-585A2FA23B6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
