@@ -29,7 +29,7 @@ jobs:
       - name: Build for Release
         run: dotnet build --configuration Release
       - name: Run unit tests
-        run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
+        run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage"
 
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
@@ -38,6 +38,10 @@ jobs:
           name: MS Tests                  
           path: '**.trx'
           reporter: 'dotnet-trx'  
+          
+    # publish web app ready for deployment
+      - name: Publish web app
+        run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
                      
   sonarcloud:
     name: SonarCloud
@@ -52,30 +56,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  selenium_tests:
-    name: selenium_tests
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    # Run Selenium tests
-    - name: Run Selenium tests
-      run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj  --verbosity normal -l:trx
-  
-    # Upload results of selenium tests
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Selenium Tests Results
-        path: TestResults/selenium.trx
-
-    - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-        name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -97,5 +77,14 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}                        # your app name
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3AC970EAC1F9407085209D3BC4BD1A8C  }} # Define secret variable in repository settings as per action documentation
-          package: .
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
       
+     # Run Selenium tests
+      - name: Run Selenium tests
+        run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp/SeleniumTest.dll /Settings:SeleniumTest.runsettings --logger:"trx;LogFileName=selenium.trx"
+        
+       # Upload results of selenium tests
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Selenium Tests Results
+          path: TestResults/selenium.trx
