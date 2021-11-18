@@ -91,7 +91,7 @@ jobs:
     steps:
     # Run Selenium tests
     - name: Run Selenium tests
-      run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --collect "Code coverage" --logger:"trx;LogFileName=selenium.trx"
+      run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj  --verbosity normal -l:trx
   
     # Upload results of selenium tests
     - uses: actions/upload-artifact@v2
