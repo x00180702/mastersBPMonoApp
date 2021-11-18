@@ -18,19 +18,10 @@
 		<PackageReference Include="FluentAssertions" Version="6.2.0" />
 
 
-		<PackageReference Include="SpecRun.Runner" Version="3.9.7" />
-
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Hooks\" />
 		<Folder Include="Drivers\" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="PageObjects\BPCalculatorObjects.cs">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Compile>
-	</ItemGroup>
-
 </Project>
