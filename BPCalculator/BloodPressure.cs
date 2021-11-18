@@ -55,7 +55,7 @@ namespace BPCalculator
                 }
 
                 // implement as part of project
-                throw new NotImplementedException("JohnGunter - not implemented yet, code to be added");
+                throw new NotImplementedException("JGunter - not implemented yet, code to be added");
             }
         }
     }
