@@ -7,7 +7,7 @@ namespace BPCalculatorAcceptanceTests.PageObjects
     class BPCalculatorObjects
     {
         //The URL of the calculator to be opened in the browser
-        private const string CalculatorUrl = "https://x00180702bpapp.azurewebsites.net";
+        private const string CalculatorUrl = "https://bloodpressurecalculator.azurewebsites.net/";
 
         //The Selenium web driver to automate the browser
         private readonly IWebDriver _webDriver;
