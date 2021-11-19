@@ -43,28 +43,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        # Disabling shallow clone is recommended for improving relevancy of reporting for sonarcloud
-        fetch-depth: 0
-    - name: Setup .Net SDK (v5.0)
+    - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.100'
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --blame --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=opencover.json
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    - uses: actions/upload-artifact@v2
+        dotnet-version: '5.0.x'
+          
+    - name: Sonarscanner for dotnet
+      uses: Secbyte/dotnet-sonarscanner@v2.3
       with:
-        name: sonarScanner
-        path: opencover.json
+        buildCommand: dotnet build .
+        testCommand: dotnet test .
+        projectKey: x00180702_bp
+        projectName: bp
+        sonarOrganisation: x00180702
+        beginArguments: >
+          /d:sonar.verbose="true"
+          /d:sonar.cs.opencover.reportsPaths='"/path/to/coverage.xml","/path/to/coverage.2.xml"'
+          /d:sonar.coverage.exclusions='"**/*.cs","**/*.md"'
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   k6_load_test:
     runs-on: ubuntu-latest
