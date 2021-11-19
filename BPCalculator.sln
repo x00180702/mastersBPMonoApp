@@ -20,8 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPCalculatorAcceptanceTests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24023017-71A3-4B9C-A3D7-716E98FF6E4F}"
 	ProjectSection(SolutionItems) = preProject
+		coverlet.runsettings.xml = coverlet.runsettings.xml
 		SonarQube.Analysis.xml = SonarQube.Analysis.xml
-		SonarScanner.Analysis.xml = SonarScanner.Analysis.xml
 	EndProjectSection
 EndProject
 Global
