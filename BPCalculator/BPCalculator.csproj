@@ -12,5 +12,6 @@
 	  <PackageReference Include="dotnet-framework-sonarscanner" Version="5.2.0" />
 	  <PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
 	  <PackageReference Include="Microsoft.NETCore.Platforms" Version="5.0.4" />
+	  <PackageReference Include="MSBuild.SonarQube.Runner.Tool" Version="4.8.0" />
 	</ItemGroup>
 </Project>
