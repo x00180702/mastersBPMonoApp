@@ -13,5 +13,6 @@
 	  <PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
 	  <PackageReference Include="Microsoft.NETCore.Platforms" Version="5.0.4" />
 	  <PackageReference Include="MSBuild.SonarQube.Runner.Tool" Version="4.8.0" />
+	  <PackageReference Include="SonarQube.Net" Version="1.0.5" />
 	</ItemGroup>
 </Project>
