@@ -49,7 +49,7 @@ jobs:
         dotnet-version: '5.0.x'
           
     - name: Sonarscanner for dotnet
-      uses: Secbyte/dotnet-sonarscanner@v2.3
+      uses: Secbyte/dotnet-sonarscanner@v5.3
       with:
         buildCommand: dotnet build .
         testCommand: dotnet test .
