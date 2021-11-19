@@ -55,7 +55,7 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --blame --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=opencover.json
+      run: dotnet test --blame --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=opencover.xml
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
@@ -64,7 +64,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: sonarScanner
-        path: opencover.json
+        path: opencover.xml
 
   k6_load_test:
     runs-on: ubuntu-latest
