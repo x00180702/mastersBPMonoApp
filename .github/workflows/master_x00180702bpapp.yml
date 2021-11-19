@@ -43,26 +43,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up .NET Core
+    
+    - name: Set up dotnet
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
-          
-    - name: Sonarscanner for dotnet
-      uses: Secbyte/dotnet-sonarscanner@v5.3
-      with:
-        buildCommand: dotnet build .
-        testCommand: dotnet test .
-        projectKey: x00180702_bp
-        projectName: bp
-        sonarOrganisation: x00180702
-        beginArguments: >
-          /d:sonar.verbose="true"
-          /d:sonar.cs.opencover.reportsPaths='"/path/to/coverage.xml","/path/to/coverage.2.xml"'
-          /d:sonar.coverage.exclusions='"**/*.cs","**/*.md"'
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Sonarqube Begin
+      run: | 
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet sonarscanner begin /o:x00180702 /k:x00180702_bp /d:sonar.login=${{ secrets.SONAR_TOKEN }} /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
+
+    - name: Build
+      run: dotnet build
+
+    - name: Test with the dotnet CLI
+      run: dotnet test --settings coverlet.runsettings --logger:trx
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ASPNETCORE_ENVIRONMENT: Development
+
+    - name: Sonarqube end
+      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   k6_load_test:
     runs-on: ubuntu-latest
