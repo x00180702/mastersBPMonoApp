@@ -12,10 +12,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k6Tests", "k6Tests", "{882C
 		performanceTestScript.js = performanceTestScript.js
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPCalculatorAcceptanceTests", "BPCalculatorAcceptanceTests\BPCalculatorAcceptanceTests.csproj", "{DE9806EC-2217-45E2-8BB0-601CE83DF164}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPCalculatorAcceptanceTests", "BPCalculatorAcceptanceTests\BPCalculatorAcceptanceTests.csproj", "{DE9806EC-2217-45E2-8BB0-601CE83DF164}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5966DA6C-819D-4303-ADC7-425B8541EC84} = {5966DA6C-819D-4303-ADC7-425B8541EC84}
 		{4A952892-6511-4DB7-AD11-386B73AC3D79} = {4A952892-6511-4DB7-AD11-386B73AC3D79}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24023017-71A3-4B9C-A3D7-716E98FF6E4F}"
+	ProjectSection(SolutionItems) = preProject
+		SonarQube.Analysis.xml = SonarQube.Analysis.xml
 	EndProjectSection
 EndProject
 Global
