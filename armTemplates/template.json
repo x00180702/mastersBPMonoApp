@@ -1,0 +1,403 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_BloodPressureCalculator_name": {
+            "defaultValue": "BloodPressureCalculator",
+            "type": "String"
+        },
+        "serverfarms_ASP_BloodPressureCalculator_a368_name": {
+            "defaultValue": "ASP-BloodPressureCalculator-a368",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2021-02-01",
+            "name": "[parameters('serverfarms_ASP_BloodPressureCalculator_a368_name')]",
+            "location": "North Europe",
+            "sku": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            },
+            "kind": "linux",
+            "properties": {
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "freeOfferExpirationTime": "2022-05-18T07:07:10.8266667",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-02-01",
+            "name": "[parameters('sites_BloodPressureCalculator_name')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_BloodPressureCalculator_a368_name'))]"
+            ],
+            "kind": "app,linux",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "bloodpressurecalculator.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "bloodpressurecalculator.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_BloodPressureCalculator_a368_name'))]",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "linuxFxVersion": "DOTNETCORE|5.0",
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 1
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "E0FB55E612A6A94023B9B693D9AEBA5D525698AE889CD1F60E4E7296DFF6F555",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/ftp')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/scm')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/web')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "linuxFxVersion": "DOTNETCORE|5.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$BloodPressureCalculator",
+                "scmType": "GitHubAction",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "appCommandLine": "dotnet BPCalculator.dll",
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.0",
+                "ftpsState": "AllAllowed",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 1,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/10158354b565465b93b5ef28c4ce35f2')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"88726d902dc38cb39c4b32c32de61e26468687d9\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"rename folder\"}",
+                "start_time": "2021-11-20T08:32:11.5398817Z",
+                "end_time": "2021-11-20T08:32:17.8186339Z",
+                "active": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/19bbafd1c9e34f4db197ed7609f97093')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"483e04d1ea93a43b36f3005455a2020cf060a71f\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"updatesonar\"}",
+                "start_time": "2021-11-19T15:07:09.6393262Z",
+                "end_time": "2021-11-19T15:07:15.8208445Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/3384c0449f6942b19a6b0b304ec3958f')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"5c43574fab4eb62af8249a3843463016200ea178\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"update version\"}",
+                "start_time": "2021-11-19T09:28:09.2996563Z",
+                "end_time": "2021-11-19T09:28:13.9911564Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/5ebbcbd645b94963b695007984fb4d24')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"bf1183e45957b67dc542219dfca11db54438d1b4\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"add analysis file\"}",
+                "start_time": "2021-11-19T15:17:15.9536055Z",
+                "end_time": "2021-11-19T15:17:21.1850056Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/763de85026d4499a84bf59f95139909e')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"d9c6cb23d7badaf6c5ffbebf041fe894c6ef8092\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"add\"}",
+                "start_time": "2021-11-19T15:34:45.6652225Z",
+                "end_time": "2021-11-19T15:34:50.6719391Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/7bef347756a047658c91d4dc9a499da1')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"4ba6ae3a84c31dc01a88c25fed1e7d151d7ec364\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"remove\"}",
+                "start_time": "2021-11-19T09:25:53.2445979Z",
+                "end_time": "2021-11-19T09:25:58.1879284Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/84a5dd4c8c9b40899b4a0e4e4375365b')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"d3c1370a361ddd16bf294f0869552ae79cd7e9e2\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"remove prop file\"}",
+                "start_time": "2021-11-19T15:59:27.9510097Z",
+                "end_time": "2021-11-19T15:59:32.9895428Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/bced74877a9349e8937e19828a0ed6eb')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"110e5df87beb0896f0d54da48450ad7b910eaa5a\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"updatename\"}",
+                "start_time": "2021-11-19T15:27:49.1318139Z",
+                "end_time": "2021-11-19T15:27:54.2348107Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/fc1fc3bbeb0c4db89b502617a61e39a1')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"1e111e02688b1328c0c8e89896ec714217d7e918\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"move\"}",
+                "start_time": "2021-11-19T15:30:41.6250863Z",
+                "end_time": "2021-11-19T15:30:46.527467Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/ff07694c3ec7441ba6cc5bba398d0a5b')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"5b88ab26890e1a53099095a328df80e16b3877cc\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"Merge branch 'master' of https://github.com/x00180702/bp\"}",
+                "start_time": "2021-11-19T15:13:32.809863Z",
+                "end_time": "2021-11-19T15:13:37.8884121Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/', parameters('sites_BloodPressureCalculator_name'), '.azurewebsites.net')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+            ],
+            "properties": {
+                "siteName": "BloodPressureCalculator",
+                "hostNameType": "Verified"
+            }
+        }
+    ]
+}
