@@ -142,7 +142,7 @@ jobs:
         with:
           subscriptionId: feb0f5fa-d5b8-451a-9e42-a8bae2ef3e68
           resourceGroupName: BloodPressureCalculator
-          template: ./armTemplates/parameters.json
+          template: ./armTemplates/template.json
  
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
