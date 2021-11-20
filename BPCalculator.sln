@@ -24,6 +24,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sonar Templates and Setting
 		SonarQube.Analysis.xml = SonarQube.Analysis.xml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "armTemplates", "armTemplates", "{DC81F5F6-9D0A-4B6B-B5D5-78B44AD58D16}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Downloads\ExportedTemplate-BloodPressureCalculator\parameters.json = ..\..\..\..\Downloads\ExportedTemplate-BloodPressureCalculator\parameters.json
+		..\..\..\..\Downloads\ExportedTemplate-BloodPressureCalculator\template.json = ..\..\..\..\Downloads\ExportedTemplate-BloodPressureCalculator\template.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
