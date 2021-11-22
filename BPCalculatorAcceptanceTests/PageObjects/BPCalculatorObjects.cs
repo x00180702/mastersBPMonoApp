@@ -22,10 +22,6 @@ namespace BPCalculatorAcceptanceTests.PageObjects
         {
             _webDriver = webDriver;
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddUserProfilePreference("download.default_directory", "YOUR_DownloadPath");
-            chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
-            chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
-            chromeOptions.AddArguments("disable-infobars");
         }
 
         public void goToWebsite()

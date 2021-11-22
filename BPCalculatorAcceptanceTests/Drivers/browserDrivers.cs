@@ -34,6 +34,7 @@ namespace BPCalculatorAcceptanceTests.Drivers
             chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
             chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
             chromeOptions.AddArguments("disable-infobars");
+   
 
             var chromeDriver = new ChromeDriver(chromeDriverService, chromeOptions);
 
