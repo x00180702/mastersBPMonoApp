@@ -115,8 +115,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("Invalid Systolic Value message is diplayed on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 8
- testRunner.Then("Invalid Diastolic  Value message is diplayed on the Blood Pressure Calcultor Page" +
-                        "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("Invalid Diastolic Value message is diplayed on the Blood Pressure Calcultor Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Chrome;
 
 namespace BPCalculatorAcceptanceTests.PageObjects
 {
@@ -15,9 +16,16 @@ namespace BPCalculatorAcceptanceTests.PageObjects
         //The default wait time in seconds for wait.Until
         public const int DefaultWaitInSeconds = 5;
 
+
+
         public BPCalculatorObjects(IWebDriver webDriver)
         {
             _webDriver = webDriver;
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.AddUserProfilePreference("download.default_directory", "YOUR_DownloadPath");
+            chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
+            chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
+            chromeOptions.AddArguments("disable-infobars");
         }
 
         public void goToWebsite()

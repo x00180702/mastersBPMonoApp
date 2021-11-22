@@ -30,6 +30,10 @@ namespace BPCalculatorAcceptanceTests.Drivers
             var chromeDriverService = ChromeDriverService.CreateDefaultService();
 
             var chromeOptions = new ChromeOptions();
+            chromeOptions.AddUserProfilePreference("download.default_directory", "YOUR_DownloadPath");
+            chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
+            chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
+            chromeOptions.AddArguments("disable-infobars");
 
             var chromeDriver = new ChromeDriver(chromeDriverService, chromeOptions);
 
