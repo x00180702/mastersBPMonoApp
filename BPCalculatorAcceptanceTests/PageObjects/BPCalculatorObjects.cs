@@ -60,6 +60,20 @@ namespace BPCalculatorAcceptanceTests.PageObjects
             return resultElement.Text;
         }
 
+        public string getInvalidMessage(String value)
+        {
+            IWebElement warningMessage;
+            if (value.Equals("Systolic"))
+            {
+                warningMessage = _webDriver.FindElement(By.CssSelector("span[id='BP_Systolic-error']"));
+            }
+            else
+            {
+                warningMessage = _webDriver.FindElement(By.CssSelector("span[id='BP_Diastolic-error']"));
+            }
+            return warningMessage.Text;
+        }
+
 
         public void EnsureCalculatorIsOpenAndReset()
         {

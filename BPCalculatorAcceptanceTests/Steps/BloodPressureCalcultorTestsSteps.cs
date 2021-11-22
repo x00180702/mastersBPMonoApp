@@ -46,5 +46,16 @@ namespace BPCalculatorAcceptanceTests.Steps
             string actualValue = _calculatorPageObject.getResults();
             Assert.AreEqual(actualValue, expectedValue);
         }
+
+
+
+        [Then(@"Invalid (.*) Value message is diplayed on the Blood Pressure Calcultor Page")]
+        public void ThenInvalidSystolicValueMessageIsDiplayedOnTheBloodPressureCalcultorPage(string expectedValue)
+        {
+            string actualValue = _calculatorPageObject.getInvalidMessage(expectedValue);
+            Assert.AreEqual(actualValue, "Invalid " + expectedValue + " Value");
+        }
+
+
     }
 }
