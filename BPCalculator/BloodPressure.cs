@@ -32,7 +32,7 @@ namespace BPCalculator
         {
             get
             {
-               if ((Systolic <= 89 && Systolic > 70) && (Diastolic <= 59 && Diastolic > 40))
+               if ((Systolic <= 89 && Systolic >= 70) && (Diastolic <= 59 && Diastolic >= 40))
                 {
                     return BPCategory.Low;
                 }else
