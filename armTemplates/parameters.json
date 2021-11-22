@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_BloodPressureCalculator_name": {
-            "value": null
+            "value": "BloodPressureCalculator_Production"
         },
         "serverfarms_ASP_BloodPressureCalculator_a368_name": {
-            "value": null
+            "value": "ASP-BloodPressureCalculator-a369"
         }
     }
 }
