@@ -34,7 +34,7 @@ namespace bpUnitTestProject
 
         }
 
-        //Unit test to check IDEAL blood pressure
+        //Unit test to check PRE HIGH blood pressure
         [Theory]
         [InlineData(120, 80)] //low range
         [InlineData(134, 86)] //mid range
@@ -47,7 +47,7 @@ namespace bpUnitTestProject
 
         }
 
-        //Unit test to check IDEAL blood pressure
+        //Unit test to check High blood pressure
         [Theory]
         [InlineData(140, 90)] //low range
         [InlineData(173, 97)] //mid range
@@ -57,6 +57,19 @@ namespace bpUnitTestProject
 
             BP = new BloodPressure() { Systolic = s, Diastolic = d };
             Assert.Equal(BPCategory.High, BP.Category);
+
+        }
+
+        //Unit test to check InValid blood pressure
+        [Theory]
+        [InlineData(195, 39)] //low range
+        [InlineData(200, 23)] //mid range
+        [InlineData(191, 101)] //high range
+        public void TestMethodInvalidVariables(int s, int d)
+        {
+
+            BP = new BloodPressure() { Systolic = s, Diastolic = d };
+            Assert.Equal(BPCategory.NotValid, BP.Category);
 
         }
     }

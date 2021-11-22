@@ -10,7 +10,8 @@ namespace BPCalculator
         [Display(Name="Ideal Blood Pressure")]  Ideal,
         [Display(Name="Pre-High Blood Pressure")] PreHigh,
         [Display(Name ="High Blood Pressure")]  High,
-        [Display(Name = "Values entered are not valid")] NotValid
+        [Display(Name = "Values entered are not valid")] NotValid,
+  
     };
 
     public class BloodPressure
@@ -31,7 +32,7 @@ namespace BPCalculator
         {
             get
             {
-               if (Systolic <= 89 && Diastolic <= 59)
+               if ((Systolic <= 89 && Systolic > 70) && (Diastolic <= 59 && Diastolic > 40))
                 {
                     return BPCategory.Low;
                 }else
@@ -53,9 +54,6 @@ namespace BPCalculator
                 {
                     return BPCategory.NotValid;
                 }
-
-                // implement as part of project
-                throw new NotImplementedException("JGunter - not implemented yet, code to be added");
             }
         }
     }
