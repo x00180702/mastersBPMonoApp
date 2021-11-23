@@ -33,6 +33,8 @@ namespace BPCalculatorAcceptanceTests.Drivers
             chromeOptions.AddArguments("--no-sandbox");
             chromeOptions.AddArguments("--disable-dev-shm-usage");
             chromeOptions.AddArguments("--headless");
+            chromeOptions.AddArguments("--verbose");
+            chromeOptions.AddArguments("--whitelisted-ips=''");
             chromeOptions.AddUserProfilePreference("download.default_directory", "YOUR_DownloadPath");
             chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
             chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
