@@ -30,6 +30,7 @@ namespace BPCalculatorAcceptanceTests.Drivers
             var chromeDriverService = ChromeDriverService.CreateDefaultService();
 
             var chromeOptions = new ChromeOptions();
+            chromeOptions.AddArguments("--no-sandbox"); // Bypass OS security model
             chromeOptions.AddUserProfilePreference("download.default_directory", "YOUR_DownloadPath");
             chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
             chromeOptions.AddUserProfilePreference("download.prompt_for_download", false);
@@ -39,7 +40,7 @@ namespace BPCalculatorAcceptanceTests.Drivers
             chromeOptions.AddArguments("--disable-extensions"); // disabling extensions
             chromeOptions.AddArguments("--disable-gpu"); // applicable to windows os only
             chromeOptions.AddArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-            chromeOptions.AddArguments("--no-sandbox"); // Bypass OS security model
+            
 
 
             var chromeDriver = new ChromeDriver(chromeDriverService, chromeOptions);
