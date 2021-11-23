@@ -43,7 +43,7 @@ namespace BPCalculatorAcceptanceTests.Drivers
             
 
 
-            var chromeDriver = new ChromeDriver(chromeDriverService, chromeOptions);
+            var chromeDriver = new OpenQA.Selenium.Chrome.ChromeDriver(chromeDriverService, chromeOptions);
 
             return chromeDriver;
         }
