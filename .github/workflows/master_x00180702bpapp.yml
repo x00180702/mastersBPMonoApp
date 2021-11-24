@@ -116,11 +116,10 @@ jobs:
           dotnet-version: '5.0.x'
         
     # Run Selenium tests
-      - name: Install dependencies
-        run: dotnet restore
       - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --verbosity normal -l:txt
-  
+#         run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --verbosity normal -l:txt
+        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --no-restore --verbosity normal
+        
     # Upload results of selenium tests
       - uses: actions/upload-artifact@v2
         with:
