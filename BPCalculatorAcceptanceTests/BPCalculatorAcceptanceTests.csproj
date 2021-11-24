@@ -40,7 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Hooks\" />
+		
 		<Folder Include="Drivers\" />
 		<Folder Include="SeleniumResults\" />
 	</ItemGroup>
