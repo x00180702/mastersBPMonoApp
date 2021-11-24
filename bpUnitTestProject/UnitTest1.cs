@@ -72,5 +72,49 @@ namespace bpUnitTestProject
             Assert.Equal(BPCategory.NotValid, BP.Category);
 
         }
+
+        //Negative Tests 
+
+        [Theory]
+        [InlineData(70, 40)]
+        [InlineData(139, 89)]
+        public void Test_for_values_outside_high_range(int s, int d)
+        {
+            BP = new BloodPressure() { Systolic = s, Diastolic = d };
+            Assert.InRange(d,BloodPressure.DiastolicMin, BPCalculator.BloodPressure.DiastolicMax);
+            Assert.NotEqual(BPCategory.High, BP.Category);
+        }
+
+        [Theory]
+        [InlineData(70, 40)]
+        [InlineData(119, 79)]
+        [InlineData(140, 90)]
+        public void Test_for_values_outside_prehigh_range(int s, int d)
+        {
+            BP = new BloodPressure() { Systolic = s, Diastolic = d };
+            Assert.InRange(d, BloodPressure.DiastolicMin, BPCalculator.BloodPressure.DiastolicMax);
+            Assert.NotEqual(BPCategory.PreHigh, BP.Category);
+        }
+
+        [Theory]
+        [InlineData(70, 40)]
+        [InlineData(89, 59)]
+        [InlineData(120, 81)]
+        public void Test_for_values_outside_ideal_range(int s, int d)
+        {
+            BP = new BloodPressure() { Systolic = s, Diastolic = d };
+            Assert.InRange(d, BloodPressure.DiastolicMin, BPCalculator.BloodPressure.DiastolicMax);
+            Assert.NotEqual(BPCategory.Ideal, BP.Category);
+        }
+
+        [Theory]
+        [InlineData(90, 60)]
+        [InlineData(139, 89)]
+        public void Test_for_values_outside_low_range(int s, int d)
+        {
+            BP = new BloodPressure() { Systolic = s, Diastolic = d };
+            Assert.InRange(d, BloodPressure.DiastolicMin, BPCalculator.BloodPressure.DiastolicMax);
+            Assert.NotEqual(BPCategory.Low, BP.Category);
+        }
     }
 }
