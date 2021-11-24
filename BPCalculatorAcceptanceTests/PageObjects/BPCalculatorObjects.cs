@@ -21,8 +21,6 @@ namespace BPCalculatorAcceptanceTests.PageObjects
         public BPCalculatorObjects(IWebDriver webDriver)
         {
             _webDriver = webDriver;
-
-            var chromeOptions = new ChromeOptions();
         }
 
         public void goToWebsite()
