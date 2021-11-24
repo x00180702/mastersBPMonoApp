@@ -116,8 +116,6 @@ jobs:
           dotnet-version: '5.0.x'
         
     # Run Selenium tests
-      - name: Install dependencies
-        run: dotnet restore
       - name: Run Selenium tests
         run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --verbosity normal -l:txt
   
