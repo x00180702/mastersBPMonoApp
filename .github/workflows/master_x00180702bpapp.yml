@@ -119,14 +119,13 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --verbosity normal -l:trx
+        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --verbosity normal -l:txt
   
     # Upload results of selenium tests
       - uses: actions/upload-artifact@v2
         with:
           name: Selenium Tests Results
-          path: '**.trx'
-          reporter: 'dotnet-trx' 
+          path: SeleniumResults.txt
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
