@@ -44,12 +44,29 @@ namespace BPCalculatorAcceptanceTests.PageObjects
             systolicElement.SendKeys(number);
         }
 
+        public void clearSystolicNumber()
+        {
+            //Clear text box
+            systolicElement.Clear();
+        
+
+        }
+
         public void enterDiastolicNumber(string number)
         {
             //Clear text box
             diastolicElement.Clear();
             //Enter text
             diastolicElement.SendKeys(number);
+        }
+
+        public void clearDiastolicNumber()
+        {
+            //Clear text box
+            diastolicElement.Clear();
+
+      
+   
         }
 
         public void clickSubmitButton()

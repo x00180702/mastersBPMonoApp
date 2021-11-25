@@ -28,6 +28,20 @@ namespace BPCalculatorAcceptanceTests.Steps
             _calculatorPageObject.enterSystolicNumber(systolic);
         }
 
+        [Given(@"the user clears the Systolic field on the Blood Pressure Calcultor Page")]
+        public void GivenTheUserClearsTheSystolicFieldOnTheBloodPressureCalcultorPage()
+        {
+            _calculatorPageObject.clearSystolicNumber();
+        }
+
+        [Given(@"the user clears the Diastolic field on the Blood Pressure Calcultor Page")]
+        public void GivenTheUserClearsTheDiastolicFieldOnTheBloodPressureCalcultorPage()
+        {
+            _calculatorPageObject.clearDiastolicNumber();
+        }
+
+
+
         [Given(@"the user enters (.*) in the Diastolic field on the Blood Pressure Calcultor Page")]
         public void GivenTheUserEntersInTheDiastolicFieldOnTheBloodPressureCalcultorPage(string diastolic)
         {
@@ -55,6 +69,15 @@ namespace BPCalculatorAcceptanceTests.Steps
             string actualValue = _calculatorPageObject.getInvalidMessage(expectedValue);
             Assert.AreEqual(actualValue, "Invalid " + expectedValue + " Value");
         }
+
+        [Then(@"'(.*)' field is required message is diplayed on the Blood Pressure Calcultor Page")]
+        public void ThenFieldIsRequiredMessageIsDiplayedOnTheBloodPressureCalcultorPage(string expectedValue)
+        {
+            string actualValue = _calculatorPageObject.getInvalidMessage(expectedValue);
+            Assert.AreEqual(actualValue, "The " + expectedValue + " field is required.");
+        }
+
+
 
 
     }
