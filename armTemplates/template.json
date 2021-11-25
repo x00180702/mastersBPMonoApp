@@ -1,28 +1,19 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "sites_BloodPressureCalculator_name": {
-            "defaultValue": "BloodPressureCalculator",
-            "type": "String"
-        },
-        "serverfarms_ASP_BloodPressureCalculator_a368_name": {
-            "defaultValue": "ASP-BloodPressureCalculator-a368",
-            "type": "String"
-        }
-    },
+    "parameters": {},
     "variables": {},
     "resources": [
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2021-02-01",
-            "name": "[parameters('serverfarms_ASP_BloodPressureCalculator_a368_name')]",
+            "name": "ASP-BloodPressureCalculator-a368",
             "location": "North Europe",
             "sku": {
-                "name": "B1",
-                "tier": "Basic",
-                "size": "B1",
-                "family": "B",
+                "name": "P1v2",
+                "tier": "PremiumV2",
+                "size": "P1v2",
+                "family": "Pv2",
                 "capacity": 1
             },
             "kind": "linux",
@@ -31,10 +22,200 @@
                 "elasticScaleEnabled": false,
                 "maximumElasticWorkerCount": 1,
                 "isSpot": false,
-                "freeOfferExpirationTime": "2022-05-18T07:07:10.8266667",
+                "freeOfferExpirationTime": "2022-05-18T07:07:00",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_bloodpressurecalculator_name": {
+            "defaultValue": "bloodpressurecalculator",
+            "type": "String"
+        },
+        "serverfarms_ASP_BloodPressureCalculator_a368_externalid": {
+            "defaultValue": "/subscriptions/feb0f5fa-d5b8-451a-9e42-a8bae2ef3e68/resourceGroups/BloodPressureCalculator/providers/Microsoft.Web/serverfarms/ASP-BloodPressureCalculator-a368",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites/slots",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_bloodpressurecalculator_name'), '/testing')]",
+            "location": "North Europe",
+            "kind": "app,linux",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "bloodpressurecalculator-testing.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "bloodpressurecalculator-testing.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('serverfarms_ASP_BloodPressureCalculator_a368_externalid')]",
                 "reserved": true,
                 "isXenon": false,
                 "hyperV": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "linuxFxVersion": "DOTNETCORE|5.0",
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 1
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "E0FB55E612A6A94023B9B693D9AEBA5D525698AE889CD1F60E4E7296DFF6F555",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_bloodpressurecalculator_name'), '/testing/ftp')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_bloodpressurecalculator_name'), 'testing')]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_bloodpressurecalculator_name'), '/testing/scm')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_bloodpressurecalculator_name'), 'testing')]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/config",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_bloodpressurecalculator_name'), '/testing/web')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_bloodpressurecalculator_name'), 'testing')]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "linuxFxVersion": "DOTNETCORE|5.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$bloodpressurecalculator__testing",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "appCommandLine": "dotnet BPCalculator.dll",
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.0",
+                "ftpsState": "AllAllowed",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 1,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/hostNameBindings",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('sites_bloodpressurecalculator_name'), '/testing/', parameters('sites_bloodpressurecalculator_name'), '-testing.azurewebsites.net')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_bloodpressurecalculator_name'), 'testing')]"
+            ],
+            "properties": {
+                "siteName": "bloodpressurecalculator(testing)",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('sites_bloodpressurecalculator_name'), '/testing/2021-11-25T20_49_23_3578090')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_bloodpressurecalculator_name'), 'testing')]"
+            ]
+        }
+    ]
+}
                 "targetWorkerCount": 0,
                 "targetWorkerSizeId": 0,
                 "zoneRedundant": false
@@ -43,10 +224,10 @@
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2021-02-01",
-            "name": "[parameters('sites_BloodPressureCalculator_name')]",
+            "name": "BloodPressureCalculator",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_BloodPressureCalculator_a368_name'))]"
+                "[resourceId('Microsoft.Web/serverfarms', 'ASP-BloodPressureCalculator-a368')]"
             ],
             "kind": "app,linux",
             "properties": {
@@ -63,7 +244,7 @@
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ASP_BloodPressureCalculator_a368_name'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'ASP-BloodPressureCalculator-a368')]",
                 "reserved": true,
                 "isXenon": false,
                 "hyperV": false,
@@ -93,10 +274,10 @@
         {
             "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/ftp')]",
+            "name": "BloodPressureCalculator/ftp",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
             ],
             "properties": {
                 "allow": true
@@ -105,10 +286,10 @@
         {
             "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/scm')]",
+            "name": "BloodPressureCalculator/scm",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
             ],
             "properties": {
                 "allow": true
@@ -117,10 +298,10 @@
         {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/web')]",
+            "name": "BloodPressureCalculator/web",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
             ],
             "properties": {
                 "numberOfWorkers": 1,
@@ -199,203 +380,1401 @@
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/10158354b565465b93b5ef28c4ce35f2')]",
+            "name": "BloodPressureCalculator/2bed074efaea4536bd390a559fb8e167",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
             ],
             "properties": {
                 "status": 4,
                 "author_email": "N/A",
                 "author": "N/A",
                 "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"88726d902dc38cb39c4b32c32de61e26468687d9\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"rename folder\"}",
-                "start_time": "2021-11-20T08:32:11.5398817Z",
-                "end_time": "2021-11-20T08:32:17.8186339Z",
+                "message": "{\"type\":\"deployment\",\"sha\":\"166b6ec2ba1956ec391e950f7106061ea2ea8af8\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"all\"}",
+                "start_time": "2021-11-24T12:47:52.0154069Z",
+                "end_time": "2021-11-24T12:47:57.8674405Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "BloodPressureCalculator/36806878129541cba15b8bf7eea52a67",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"662b31bd3fda005774c9915eaac02acd7c03711e\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"add tst runner\"}",
+                "start_time": "2021-11-24T12:59:16.8922034Z",
+                "end_time": "2021-11-24T12:59:22.7489971Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "BloodPressureCalculator/384d60e3eb5c409c865e35f3f4735cea",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"d03ca46ee9f4afcd99e2701fd6adf51fa261c200\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"test fw\"}",
+                "start_time": "2021-11-24T13:07:45.1336178Z",
+                "end_time": "2021-11-24T13:07:50.7609335Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "BloodPressureCalculator/59e09870be544ead954065f4df48fa86",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"b70432ba638150b7277d73a528172e1ab439006c\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"update assertions\"}",
+                "start_time": "2021-11-25T07:36:34.1649907Z",
+                "end_time": "2021-11-25T07:36:40.299803Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "BloodPressureCalculator/71bdc8bfee2c4a35a6a76308cd489b67",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"731ef7f0bf3426165ad5320737aab6cce5df47c4\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"testplat\"}",
+                "start_time": "2021-11-24T12:56:48.3151102Z",
+                "end_time": "2021-11-24T12:56:55.0043516Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2021-02-01",
+            "name": "BloodPressureCalculator/90dd07d588eb4f0b8037ec4698f397f7",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"7ed9c35f9053d382f2fbd5e4003f86a9f79bf7fc\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"add azure login\"}",
+                "start_time": "2021-11-25T16:04:51.6716302Z",
+                "end_time": "2021-11-25T16:04:58.7975974Z",
                 "active": true
             }
         },
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/19bbafd1c9e34f4db197ed7609f97093')]",
+            "name": "BloodPressureCalculator/bafa6ba1b5c94484919e4b715d92202a",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
             ],
             "properties": {
                 "status": 4,
                 "author_email": "N/A",
                 "author": "N/A",
                 "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"483e04d1ea93a43b36f3005455a2020cf060a71f\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"updatesonar\"}",
-                "start_time": "2021-11-19T15:07:09.6393262Z",
-                "end_time": "2021-11-19T15:07:15.8208445Z",
+                "message": "{\"type\":\"deployment\",\"sha\":\"b4e1f812f7efc6f21fcfddec4e31cc118cca30cf\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"check\"}",
+                "start_time": "2021-11-24T13:27:14.2013839Z",
+                "end_time": "2021-11-24T13:27:19.8137899Z",
                 "active": false
             }
         },
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/3384c0449f6942b19a6b0b304ec3958f')]",
+            "name": "BloodPressureCalculator/bd3dced7ec8d43cb946f96175494c62a",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
             ],
             "properties": {
                 "status": 4,
                 "author_email": "N/A",
                 "author": "N/A",
                 "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"5c43574fab4eb62af8249a3843463016200ea178\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"update version\"}",
-                "start_time": "2021-11-19T09:28:09.2996563Z",
-                "end_time": "2021-11-19T09:28:13.9911564Z",
+                "message": "{\"type\":\"deployment\",\"sha\":\"c20a672b8a4ebb075cb78f9a57b57a5b0d5d7ae9\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"update report\"}",
+                "start_time": "2021-11-24T13:21:33.5777882Z",
+                "end_time": "2021-11-24T13:21:39.1883507Z",
                 "active": false
             }
         },
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/5ebbcbd645b94963b695007984fb4d24')]",
+            "name": "BloodPressureCalculator/ed12d0507c9846ae8eee45f5e6851370",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
             ],
             "properties": {
                 "status": 4,
                 "author_email": "N/A",
                 "author": "N/A",
                 "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"bf1183e45957b67dc542219dfca11db54438d1b4\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"add analysis file\"}",
-                "start_time": "2021-11-19T15:17:15.9536055Z",
-                "end_time": "2021-11-19T15:17:21.1850056Z",
+                "message": "{\"type\":\"deployment\",\"sha\":\"4f87cb8cb6ecb433053f02af23efb4a32deddcfa\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"add scripts\"}",
+                "start_time": "2021-11-25T08:46:54.315083Z",
+                "end_time": "2021-11-25T08:46:59.8824951Z",
                 "active": false
             }
         },
         {
             "type": "Microsoft.Web/sites/deployments",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/763de85026d4499a84bf59f95139909e')]",
+            "name": "BloodPressureCalculator/ed75162ceee94a17a66200f326058bdc",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
             ],
             "properties": {
                 "status": 4,
                 "author_email": "N/A",
                 "author": "N/A",
                 "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"d9c6cb23d7badaf6c5ffbebf041fe894c6ef8092\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"add\"}",
-                "start_time": "2021-11-19T15:34:45.6652225Z",
-                "end_time": "2021-11-19T15:34:50.6719391Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/7bef347756a047658c91d4dc9a499da1')]",
-            "location": "North Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"4ba6ae3a84c31dc01a88c25fed1e7d151d7ec364\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"remove\"}",
-                "start_time": "2021-11-19T09:25:53.2445979Z",
-                "end_time": "2021-11-19T09:25:58.1879284Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/84a5dd4c8c9b40899b4a0e4e4375365b')]",
-            "location": "North Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"d3c1370a361ddd16bf294f0869552ae79cd7e9e2\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"remove prop file\"}",
-                "start_time": "2021-11-19T15:59:27.9510097Z",
-                "end_time": "2021-11-19T15:59:32.9895428Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/bced74877a9349e8937e19828a0ed6eb')]",
-            "location": "North Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"110e5df87beb0896f0d54da48450ad7b910eaa5a\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"updatename\"}",
-                "start_time": "2021-11-19T15:27:49.1318139Z",
-                "end_time": "2021-11-19T15:27:54.2348107Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/fc1fc3bbeb0c4db89b502617a61e39a1')]",
-            "location": "North Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"1e111e02688b1328c0c8e89896ec714217d7e918\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"move\"}",
-                "start_time": "2021-11-19T15:30:41.6250863Z",
-                "end_time": "2021-11-19T15:30:46.527467Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/ff07694c3ec7441ba6cc5bba398d0a5b')]",
-            "location": "North Europe",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "GITHUB_ZIP_DEPLOY",
-                "message": "{\"type\":\"deployment\",\"sha\":\"5b88ab26890e1a53099095a328df80e16b3877cc\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"Merge branch 'master' of https://github.com/x00180702/bp\"}",
-                "start_time": "2021-11-19T15:13:32.809863Z",
-                "end_time": "2021-11-19T15:13:37.8884121Z",
+                "message": "{\"type\":\"deployment\",\"sha\":\"c7effc0d2d148019ab7321443b22d5ab899f8836\",\"repoName\":\"x00180702/bp\",\"slotName\":\"Production\",\"commitMessage\":\"add adaptor\"}",
+                "start_time": "2021-11-24T12:51:36.6089919Z",
+                "end_time": "2021-11-24T12:51:42.3947104Z",
                 "active": false
             }
         },
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2021-02-01",
-            "name": "[concat(parameters('sites_BloodPressureCalculator_name'), '/', parameters('sites_BloodPressureCalculator_name'), '.azurewebsites.net')]",
+            "name": "BloodPressureCalculator/bloodpressurecalculator.azurewebsites.net",
             "location": "North Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_BloodPressureCalculator_name'))]"
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
             ],
             "properties": {
                 "siteName": "BloodPressureCalculator",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-18T07_49_15_0477816",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-18T10_49_15_2626887",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-18T13_49_15_3249350",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-18T16_49_15_4576966",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-18T19_49_15_5919612",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-19T04_49_15_9791041",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-19T07_49_16_1119926",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-19T10_49_16_2514474",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-19T13_49_16_3560523",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-19T16_49_16_4958093",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-19T19_49_16_6110079",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-20T04_49_17_4322059",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-20T07_49_17_5493143",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-20T10_49_17_6858906",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-20T13_49_17_8151394",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-20T16_49_17_9409019",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-20T19_49_18_1189048",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T03_49_18_4283535",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T04_49_18_4745621",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T05_49_18_5082435",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T06_49_18_6226031",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T07_49_18_6095682",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T08_49_18_6857158",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T09_49_18_7037401",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T10_49_18_7307946",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T11_49_18_7598240",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T12_49_18_8093474",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T13_49_18_8456468",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T14_49_18_8917985",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T15_49_18_9366331",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T16_49_18_9791088",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T17_49_19_0487390",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T18_49_19_0905729",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T19_49_19_0934506",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T20_49_19_1368758",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T21_49_19_1885703",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T22_49_19_2139313",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-21T23_49_19_2721474",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T00_49_19_3391987",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T01_49_19_3401076",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T02_49_19_4240661",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T03_49_19_4281956",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T04_49_19_4771044",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T05_49_19_5166873",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T06_49_19_5880834",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T07_49_19_6117443",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T08_49_19_6458264",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T09_49_19_6812997",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T10_49_19_7239157",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T11_49_19_7578937",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T12_49_19_8475323",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T13_49_19_9107365",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T14_49_19_9313076",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T15_49_19_9441010",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T16_49_19_9772668",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T17_49_20_0221437",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T18_49_20_0989663",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T19_49_20_1145785",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T20_49_20_1704060",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T21_49_20_1871648",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T22_49_20_2575301",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-22T23_49_20_3308199",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T00_49_20_3204329",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T01_49_20_3586763",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T02_49_20_4049209",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T03_49_20_4765155",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T04_49_20_4826697",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T05_49_20_5314346",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T06_49_20_6050046",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T07_49_20_6769470",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T08_49_20_6723588",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T09_49_20_7062379",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T10_49_20_7632785",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T11_49_20_8295834",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T12_49_20_9144899",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T13_49_20_9158662",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T14_49_20_9545812",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T15_49_21_0021792",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T16_49_21_0451974",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T17_49_21_1076276",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T18_49_21_1750241",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T19_49_21_1695401",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T20_49_21_2042275",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T21_49_21_2666113",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T22_49_21_2887426",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-23T23_49_21_3841271",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T00_49_21_4062663",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T01_49_21_4659694",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T02_49_21_5056926",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T03_49_21_5474353",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T04_49_21_5473233",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T05_49_21_5881456",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T06_49_21_6471660",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T07_49_21_7029151",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T08_49_21_7931954",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T09_49_21_7708032",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T10_49_21_8288192",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T11_49_22_5274770",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T12_49_21_9119068",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T13_49_21_9378332",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T14_49_22_0433161",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T15_49_22_0222870",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T16_49_22_0557864",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T17_49_22_1149774",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T18_49_22_1489760",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T19_49_22_2093759",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T20_49_22_2896575",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T21_49_22_3103189",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T22_49_22_3495629",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-24T23_49_22_3975313",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T00_49_22_4366789",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T01_49_22_4878484",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T02_49_22_5549286",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T03_49_22_5743218",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T04_49_22_6393675",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T05_49_22_6657064",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T06_49_22_7727119",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T07_49_22_7744124",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T08_49_22_8339353",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T09_49_22_8907522",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T10_49_22_8749893",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T11_49_22_9225836",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T12_49_23_0398183",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T13_49_22_9991677",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T14_49_23_0560508",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T15_49_23_1034702",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T16_49_23_1553819",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/snapshots",
+            "apiVersion": "2015-08-01",
+            "name": "BloodPressureCalculator/2021-11-25T17_49_23_1890358",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'BloodPressureCalculator')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/slots",
+            "apiVersion": "2021-02-01",
+            "name": "bloodpressurecalculator/Testing",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', 'bloodpressurecalculator')]",
+                "[resourceId('Microsoft.Web/serverfarms', 'ASP-BloodPressureCalculator-a368')]"
+            ],
+            "kind": "app,linux",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "bloodpressurecalculator-testing.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "bloodpressurecalculator-testing.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'ASP-BloodPressureCalculator-a368')]",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "linuxFxVersion": "DOTNETCORE|5.0",
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 1
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "E0FB55E612A6A94023B9B693D9AEBA5D525698AE889CD1F60E4E7296DFF6F555",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-02-01",
+            "name": "bloodpressurecalculator/Testing/ftp",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', 'bloodpressurecalculator', 'Testing')]",
+                "[resourceId('Microsoft.Web/sites', 'bloodpressurecalculator')]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/basicPublishingCredentialsPolicies",
+            "apiVersion": "2021-02-01",
+            "name": "bloodpressurecalculator/Testing/scm",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', 'bloodpressurecalculator', 'Testing')]",
+                "[resourceId('Microsoft.Web/sites', 'bloodpressurecalculator')]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/config",
+            "apiVersion": "2021-02-01",
+            "name": "bloodpressurecalculator/Testing/web",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', 'bloodpressurecalculator', 'Testing')]",
+                "[resourceId('Microsoft.Web/sites', 'bloodpressurecalculator')]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "linuxFxVersion": "DOTNETCORE|5.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$bloodpressurecalculator__Testing",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "appCommandLine": "dotnet BPCalculator.dll",
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.0",
+                "ftpsState": "AllAllowed",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 1,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/hostNameBindings",
+            "apiVersion": "2021-02-01",
+            "name": "bloodpressurecalculator/Testing/bloodpressurecalculator-testing.azurewebsites.net",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', 'bloodpressurecalculator', 'Testing')]",
+                "[resourceId('Microsoft.Web/sites', 'bloodpressurecalculator')]"
+            ],
+            "properties": {
+                "siteName": "bloodpressurecalculator(Testing)",
                 "hostNameType": "Verified"
             }
         }
