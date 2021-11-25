@@ -76,7 +76,7 @@ namespace BPCalculatorAcceptanceTests.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Check All Catagory details")]
         [NUnit.Framework.CategoryAttribute("test")]
-        [NUnit.Framework.TestCaseAttribute("70", "40", "Low Blood Pressure.", null)]
+        [NUnit.Framework.TestCaseAttribute("70", "40", "Low Blood Pressure", null)]
         [NUnit.Framework.TestCaseAttribute("100", "50", "Ideal Blood Pressure", null)]
         [NUnit.Framework.TestCaseAttribute("140", "85", "Pre-High Blood Pressure", null)]
         [NUnit.Framework.TestCaseAttribute("170", "100", "High Blood Pressure", null)]

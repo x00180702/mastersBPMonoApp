@@ -10,7 +10,7 @@ Scenario Outline: Check All Catagory details
 
 	Examples: 
     | Systolic	| Diastolic |		Result				|
-    |    70		|   40		|   Low Blood Pressure.		|
+    |    70		|   40		|   Low Blood Pressure		|
     |    100	|   50		|   Ideal Blood Pressure	|
 	|    140	|   85		|   Pre-High Blood Pressure	|
 	|    170	|   100		|   High Blood Pressure		|

@@ -36,6 +36,9 @@ namespace BPCalculatorAcceptanceTests.PageObjects
         private IWebElement resultElement => _webDriver.FindElement(By.CssSelector("label[id='results']"));
         private IWebElement ResetButtonElement => _webDriver.FindElement(By.Id("reset-button"));
 
+        private IWebElement warningElement => _webDriver.FindElement(By.CssSelector("div[class='text-danger validation-summary-errors'] > ul > li:nth-of-type(1)"));
+
+
         public void enterSystolicNumber(string number)
         {
             //Clear text box
@@ -92,6 +95,11 @@ namespace BPCalculatorAcceptanceTests.PageObjects
                 warningMessage = _webDriver.FindElement(By.CssSelector("span[id='BP_Diastolic-error']"));
             }
             return warningMessage.Text;
+        }
+
+        public string getWarningMessage()
+        {
+            return warningElement.Text;
         }
 
 
