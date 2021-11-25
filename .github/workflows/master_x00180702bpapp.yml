@@ -144,6 +144,22 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}    
+          
+  azure_setup:
+      runs-on: ubuntu-latest
+      needs: selenium_test
+      steps:
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      - uses: actions/checkout@master
+      - uses: azure/arm-deploy@v1
+      
+        with:
+          subscriptionId: feb0f5fa-d5b8-451a-9e42-a8bae2ef3e68
+          resourceGroupName: BloodPressureCalculator
+          template: ./armTemplates/template.json
                
   deploy:
     runs-on: ubuntu-latest
