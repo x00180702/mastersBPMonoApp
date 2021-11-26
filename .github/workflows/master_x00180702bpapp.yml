@@ -156,6 +156,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: create_staging_slot
     steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v2
+      
     - name: Get Staging Slot publish profile
       id: publishprofileTesting
       uses: aliencube/publish-profile-actions@v1
@@ -171,13 +174,11 @@ jobs:
       env:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       with:
-          app-name: 'BloodPressureCalculator' 
+          app-name: 'BloodPressureCalculatorTesting' 
           slot-name: 'Testing'
           publish-profile: ${{ steps.publishprofileTesting.outputs.profile }}
-          package: .     
 
-   
-               
+              
   deploy:
     runs-on: ubuntu-latest
     needs: selenium_test
