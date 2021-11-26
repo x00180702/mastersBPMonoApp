@@ -166,7 +166,7 @@ jobs:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       with:
         resourceGroupName: 'bloodpressurecalculator'
-        appName: 'BloodPressureCalculator-Testing'
+        appName: 'Testing (BloodPressureCalculator/Testing)'
 
     - name: Deploy to Testing Slot
       id: deploy-to-webapp
