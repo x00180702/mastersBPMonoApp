@@ -168,6 +168,8 @@ jobs:
     - name: Deploy to Testing Slot
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
+      env:
+        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       with:
           app-name: 'BloodPressureCalculator' 
           slot-name: 'Testing'
