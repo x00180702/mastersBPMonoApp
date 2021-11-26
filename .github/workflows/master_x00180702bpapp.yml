@@ -4,7 +4,7 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - x00180702bpApp
 env:
   URI: https://bloodpressurecalculator.azurewebsites.net 
-  AZURE_WEBAPP_NAME_Test_Slot: BloodPressureCalculator
+  AZURE_WEBAPP_NAME_Test_Slot: BloodPressureCalculator-Testing
   
 on:
   push:
