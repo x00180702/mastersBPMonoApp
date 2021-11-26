@@ -27,11 +27,11 @@
         "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
       }
     },
-    "webAppName": {
+    "BloodPressureCalculator": {
       "type": "string",
       "minLength": 1
     },
-    "stagingSlotName": {
+    "BloodPressureCalculator-Testing": {
       "type": "string",
       "minLength": 1
     }
