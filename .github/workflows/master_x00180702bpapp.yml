@@ -4,6 +4,7 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - x00180702bpApp
 env:
   URI: https://bloodpressurecalculator.azurewebsites.net 
+  AZURE_WEBAPP_NAME_Test_Slot: Testing (BloodPressureCalculator/Testing)  
   
 on:
   push:
@@ -166,7 +167,7 @@ jobs:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       with:
         resourceGroupName: 'bloodpressurecalculator'
-        appName: 'Testing (BloodPressureCalculator/Testing)'
+        appName: ${{ env.AZURE_WEBAPP_NAME_Test_Slot }} 
 
     - name: Deploy to Testing Slot
       id: deploy-to-webapp
