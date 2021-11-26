@@ -150,7 +150,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}   
           
       - name: Create slot on staging site
-        run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot BloodPressureCalculator-Testing
+        run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot BloodPressureCalculatorTesting
  
   get_publish_app:
     runs-on: ubuntu-latest
@@ -163,7 +163,7 @@ jobs:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       with:
         resourceGroupName: 'bloodpressurecalculator'
-        app-name: 'BloodPressureCalculator-Testing'
+        app-name: 'BloodPressureCalculatorTesting'
 
         
   deploy_testing:
