@@ -4,7 +4,7 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - x00180702bpApp
 env:
   URI: https://bloodpressurecalculator.azurewebsites.net 
-  AZURE_WEBAPP_NAME_Test_Slot: Testing (BloodPressureCalculator/Testing)  
+  AZURE_WEBAPP_NAME_Test_Slot: BloodPressureCalculator
   
 on:
   push:
@@ -153,29 +153,33 @@ jobs:
       - name: Create slot on staging site
         run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot Testing
  
-  get_publish_app:
+  build_test_deploy:
+    name: 'FunctionApp Build, Test & Deploy'
     runs-on: ubuntu-latest
     needs: create_staging_slot
     steps:
     - name: Checkout the repo
       uses: actions/checkout@v2
-      
+
+  
     - name: Get Staging Slot publish profile
-      id: publishprofileTesting
+      id: publishprofile
       uses: aliencube/publish-profile-actions@v1
       env:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       with:
         resourceGroupName: 'bloodpressurecalculator'
         appName: ${{ env.AZURE_WEBAPP_NAME_Test_Slot }} 
+        slot-name: 'BloodPressureCalculator-Testing'
+        
 
     - name: Deploy to Testing Slot
-      id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
           app-name: ${{ env.AZURE_WEBAPP_NAME_Test_Slot }}  
-          slot-name: 'Testing'
-          publish-profile: ${{ steps.publishprofileTesting.outputs.profile }}
+          slot-name: 'BloodPressureCalculator-Testing'
+          publish-profile: ${{ steps.publishprofile.outputs.profile }}
+          package: .
 
               
   deploy:
