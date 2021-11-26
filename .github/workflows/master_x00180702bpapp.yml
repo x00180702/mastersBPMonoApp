@@ -160,11 +160,11 @@ jobs:
       id: publishprofile
       uses: aliencube/publish-profile-actions@v1
       env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS_DEV }}
+        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       with:
         resourceGroupName: 'bloodpressurecalculator'
-        app-name: 'BloodPressureCalculator'
-        slot-name: 'Testing'   
+        app-name: 'BloodPressureCalculator-Testing'
+
         
   deploy_testing:
     runs-on: ubuntu-latest
