@@ -173,7 +173,7 @@ jobs:
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-          app-name: 'BloodPressureCalculatorTesting' 
+          app-name: ${{ env.AZURE_WEBAPP_NAME_Test_Slot }}  
           slot-name: 'Testing'
           publish-profile: ${{ steps.publishprofileTesting.outputs.profile }}
 
