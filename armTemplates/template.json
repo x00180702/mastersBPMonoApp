@@ -2,7 +2,8 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "BloodPressureCalculator": {
+    "appServiceName": {
+	  "defaultValue": "ASP-BloodPressureCalculator-a368",
       "type": "string",
       "minLength": 1
     },
@@ -27,11 +28,13 @@
         "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
       }
     },
-    "BloodPressureCalculator": {
+    "webAppName": {
+	  "defaultValue": "BloodPressureCalculator",
       "type": "string",
       "minLength": 1
     },
-    "BloodPressureCalculator-Testing": {
+    "stagingSlotName": {
+	  "defaultValue": "BloodPressureCalculator-Testing",
       "type": "string",
       "minLength": 1
     }
@@ -56,7 +59,7 @@
       }
     },
     {
-      "name": "[parameters('BloodPressureCalculator')]",
+      "name": "[parameters('webAppName')]",
       "type": "Microsoft.Web/sites",
       "location": "North Europe",
       "apiVersion": "2015-08-01",
@@ -74,7 +77,7 @@
       "resources": [
         {
           "apiVersion": "2015-08-01",
-          "name": "[parameters('BloodPressureCalculator-Testing')]",
+          "name": "[parameters('stagingSlotName')]",
           "type": "slots",
           "tags": {
             "displayName": "webAppSlots"
