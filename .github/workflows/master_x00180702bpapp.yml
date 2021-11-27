@@ -170,7 +170,7 @@ jobs:
       with:
         resourceGroupName: 'bloodpressurecalculator'
         appName: ${{ env.AZURE_WEBAPP_NAME_Test_Slot }} 
-        slot-name: 'BloodPressureCalculator-Testing'
+
         
 
     - name: Deploy to Testing Slot
