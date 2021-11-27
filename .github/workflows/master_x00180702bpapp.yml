@@ -5,6 +5,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - x00180702bpApp
 env:
   URI: https://bloodpressurecalculator.azurewebsites.net 
   AZURE_WEBAPP_NAME_Test_Slot: Testing (BloodPressureCalculator/Testing)
+  AZURE_WEBAPP_PACKAGE_PATH: 'publish' 
   
 on:
   push:
@@ -33,155 +34,8 @@ jobs:
       - name: Run unit tests
         run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
         
-      - name: Publish Unit Test Results
-        uses: dorny/test-reporter@v1
-        with:
-          artifact: ''
-          name: MS Tests                  
-          path: '**.trx'
-          reporter: 'dotnet-trx' 
-          
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    
-    - name: Set up dotnet
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.x'
-
-    - name: Install dependencies
-      run: dotnet restore
-
-    - name: Sonarqube Begin
-      run: | 
-          dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /o:x00180702 /k:x00180702_bp /d:sonar.login=${{ secrets.SONAR_TOKEN }} /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
-
-    - name: Build
-      run: dotnet build
-
-    - name: Test with the dotnet CLI
-      run: dotnet test --settings coverlet.runsettings --logger:trx
-      env:
-          ASPNETCORE_ENVIRONMENT: Development
-
-    - name: Sonarqube end
-      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  k6_load_test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Pull Docker image for k6
-      run: docker pull loadimpact/k6
-
-    - name: Run k6 load test, capture report
-      run: docker run -i loadimpact/k6 run - <k6Tests/performanceTestScript.js > k6report.txt
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: k6report
-        path: k6report.txt
-        
-        
-  zapCheck:
-    name: zapChecker
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Pull Docker image for ZAP
-      run: docker pull owasp/zap2docker-weekly
-    - name: Run baseline scan
-      run: docker run -v /report:/zap/wrk/:rw --user root -t owasp/zap2docker-weekly zap-baseline.py -t ${{env.URI}} -I -r zapreport.html
-  
-    - uses: actions/upload-artifact@v2
-      name: upload ZAP report
-      with:
-        name: ZAPreport
-        path: /report/zapreport.html
-        
-  selenium_test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.x'
-        
-    # Run Selenium tests
-      - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --verbosity normal -l:trx
-
-        
-    # Upload results of selenium tests
-      - name: Publish Selenium Test Results
-        uses: dorny/test-reporter@v1
-        with:
-          artifact: ''
-          name: Selenium Results                  
-          path: '**.trx'
-          reporter: 'dotnet-trx' 
-
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp   
-          
-
-  create_staging_slot:
-    runs-on: ubuntu-latest
-    needs: selenium_test
-    steps:
-    # login to Azure account
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}   
-          
-      - name: Create slot on staging site
-        run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot Testing
-        
-  build_test_deploy:
-    name: 'FunctionApp Build, Test & Deploy'
-    runs-on: ubuntu-latest
-    needs: create_staging_slot
-    steps:
-    - name: Checkout the repo
-      uses: actions/checkout@v2
-
-  
-    - name: Get Staging Slot publish profile
-      id: publishprofile
-      uses: aliencube/publish-profile-actions@v1
-      env:
-        AZURE_CREDENTIALS: $\{\{ secrets.AZURE_CREDENTIALS \}\}
-      with:
-        resourceGroupName: $\{\{ secrets.RESOURCE_GROUP_NAME_DEV \}\}
-        appName: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
-        slot-name: 'BloodPressureCalculator-Testing'
-
-        
-
-    - name: Deploy to Testing Slot
-      uses: azure/webapps-deploy@v2
-      with:
-          app-name: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
-          slot-name: 'BloodPressureCalculator-Testing'
-          publish-profile: $\{\{ steps.publishprofile.outputs.profile \}\}
-          package: './'
-              
+   
+                   
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -191,10 +45,8 @@ jobs:
       
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: .net-app
+      - name: Publish
+        run: dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
  
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
