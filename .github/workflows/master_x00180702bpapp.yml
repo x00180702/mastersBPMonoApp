@@ -170,7 +170,7 @@ jobs:
       with:
         resourceGroupName: $\{\{ secrets.RESOURCE_GROUP_NAME_DEV \}\}
         appName: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
-        slot: 'BloodPressureCalculator-Testing'
+        slot-name: 'BloodPressureCalculator-Testing'
 
         
 
@@ -178,7 +178,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
           app-name: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
-          slot: 'BloodPressureCalculator-Testing'
+          slot-name: 'BloodPressureCalculator-Testing'
           publish-profile: $\{\{ steps.publishprofile.outputs.profile \}\}
           package: './'
               
