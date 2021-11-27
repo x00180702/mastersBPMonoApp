@@ -56,33 +56,33 @@ jobs:
         name: 'FunctionApp Build, Test & Deploy'
         runs-on: ubuntu-latest
         steps:
-        - name: Checkout the repo
-          uses: actions/checkout@v2
+          - name: Checkout the repo
+            uses: actions/checkout@v2
 
-        - name: Get FunctionApp publish profile
-          id: publishprofile
-          uses: aliencube/publish-profile-actions@v1
-          env:
-            AZURE_CREDENTIALS: $\{\{ secrets.AZURE_CREDENTIALS \}\}
-          with:
-            resourceGroupName: $\{\{ secrets.RESOURCE_GROUP_NAME_DEV \}\}
-            appName: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
+          - name: Get FunctionApp publish profile
+            id: publishprofile
+            uses: aliencube/publish-profile-actions@v1
+            env:
+              AZURE_CREDENTIALS: $\{\{ secrets.AZURE_CREDENTIALS \}\}
+            with:
+              resourceGroupName: $\{\{ secrets.RESOURCE_GROUP_NAME_DEV \}\}
+              appName: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
     
-        - name: Deploy FunctionApp
-          uses: azure/webapps-deploy@v2
-          with:
-            app-name: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
-            package: published
-            publish-profile: $\{\{ steps.publishprofile.outputs.profile \}\}
+          - name: Deploy FunctionApp
+            uses: azure/webapps-deploy@v2
+            with:
+              app-name: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
+              package: published
+              publish-profile: $\{\{ steps.publishprofile.outputs.profile \}\}
     
-        - name: Reset FunctionApp publish profile
-          uses: aliencube/publish-profile-actions@v1
-          env:
-            AZURE_CREDENTIALS: $\{\{ secrets.AZURE_CREDENTIALS_DEV \}\}
-          with:
-            resourceGroupName: $\{\{ secrets.RESOURCE_GROUP_NAME_DEV \}\}
-            appName: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
-            reset: true  
+          - name: Reset FunctionApp publish profile
+            uses: aliencube/publish-profile-actions@v1
+            env:
+              AZURE_CREDENTIALS: $\{\{ secrets.AZURE_CREDENTIALS_DEV \}\}
+            with:
+              resourceGroupName: $\{\{ secrets.RESOURCE_GROUP_NAME_DEV \}\}
+              appName: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
+              reset: true  
   
   deploy:
     runs-on: ubuntu-latest
