@@ -4,7 +4,7 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - x00180702bpApp
 env:
   URI: https://bloodpressurecalculator.azurewebsites.net 
-  AZURE_WEBAPP_NAME_Test_Slot: Testing (BloodPressureCalculator/Testing)
+
   
 on:
   push:
@@ -139,20 +139,7 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp   
-          
-
-  create_staging_slot:
-    runs-on: ubuntu-latest
-    needs: selenium_test
-    steps:
-    # login to Azure account
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}   
-          
-      - name: Create slot on staging site
-        run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot Testing
-          
+                
   deploy:
     runs-on: ubuntu-latest
     needs: selenium_test
