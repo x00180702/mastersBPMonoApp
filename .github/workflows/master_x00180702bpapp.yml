@@ -184,7 +184,7 @@ jobs:
               
   deploy:
     runs-on: ubuntu-latest
-    needs: selenium_test
+   # needs: selenium_test
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
