@@ -178,9 +178,8 @@ jobs:
       with:
           app-name: ${{ env.AZURE_WEBAPP_NAME_Test_Slot }}  
           slot-name: 'BloodPressureCalculator-Testing'
+          package: published
           publish-profile: ${{ steps.publishprofile.outputs.profile }}
-          package: .
-
               
   deploy:
     runs-on: ubuntu-latest
