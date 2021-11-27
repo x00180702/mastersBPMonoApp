@@ -152,7 +152,7 @@ jobs:
           
       - name: Create slot on staging site
         run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot Testing
- 
+        
   build_test_deploy:
     name: 'FunctionApp Build, Test & Deploy'
     runs-on: ubuntu-latest
@@ -171,6 +171,10 @@ jobs:
         resourceGroupName: $\{\{ secrets.RESOURCE_GROUP_NAME_DEV \}\}
         appName: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
 
+    - name: Show Profile
+      shell: bash
+      run: |
+        echo "WebApp: ${{ steps.webapp.outputs.profile }}"
         
 
     - name: Deploy to Testing Slot
