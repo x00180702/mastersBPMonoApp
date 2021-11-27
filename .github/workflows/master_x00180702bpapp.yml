@@ -152,6 +152,18 @@ jobs:
           
       - name: Create slot on staging site
         run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot Testing
+        
+        
+        
+
+  build-and-deploy:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Login via Az Module
+        uses: azure/login@v1
+        with:
+          creds: $\{\{secrets.AZURE_CREDENTIALS \}\}
+          enable-AzPSSession: true
  
   build_test_deploy:
     name: 'FunctionApp Build, Test & Deploy'
@@ -161,31 +173,48 @@ jobs:
     - name: Checkout the repo
       uses: actions/checkout@v2
 
-  
-    - name: Get Staging Slot publish profile
-      id: publishprofile
-      uses: aliencube/publish-profile-actions@v1
-      env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-      with:
-        resourceGroupName: 'bloodpressurecalculator'
-        appName: ${{ env.AZURE_WEBAPP_NAME_Test_Slot }} 
+    - name: Get publish Profile
+      id: fncapp
+      shell: pwsh
+      run: |
+          $profile = Get-AzWebAppPublishingProfile `
+              -ResourceGroupName $\{\{ 'bloodpressurecalculator' \}\} `
+              -Name $\{\{ env.AZURE_WEBAPP_NAME_Test_Slot \}\}
+          $profile = $profile.Replace("`r", "").Replace("`n", "")
+          Write-Output "::set-output name=profile::$profile"
+          
+
+  build-and-deploy2:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Get publish Profile
+        id: fncapp
+
+      - name: Show publish profile
+        shell: pwsh
+        run: |
+          echo $\{\{ steps.fncapp.outputs.profile \}\}          
+          
+  build-and-deploy3:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Reset publish Profile
+        shell: pwsh
+        run: |
+          $profile = Reset-AzWebAppPublishingProfile `
+              -ResourceGroupName $\{\{ secrets.RESOURCE_GROUP_NAME \}\} `
+              -Name $\{\{ secrets.FUNCTION_APP_NAME \}\}
+          $profile = ""
 
         
 
-    - name: Deploy to Testing Slot
-      uses: azure/webapps-deploy@v2
-      with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME_Test_Slot }}  
-          slot-name: 'BloodPressureCalculator-Testing'
-          package: published
-          publish-profile: ${{ steps.publishprofile.outputs.profile }}
+
               
   deploy:
     runs-on: ubuntu-latest
     needs: selenium_test
     environment:
-      name: 'Production'
+      name: 'Testing'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
       
 
