@@ -171,18 +171,14 @@ jobs:
         resourceGroupName: $\{\{ secrets.RESOURCE_GROUP_NAME_DEV \}\}
         appName: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\}
 
-    - name: Show Profile
-      shell: bash
-      run: |
-        echo "WebApp: ${{ steps.webapp.outputs.profile }}"
         
 
     - name: Deploy to Testing Slot
       uses: azure/webapps-deploy@v2
       with:
           app-name: $\{\{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV \}\} 
-          package: published
           publish-profile: $\{\{ steps.publishprofile.outputs.profile \}\}
+          package: './'
               
   deploy:
     runs-on: ubuntu-latest
