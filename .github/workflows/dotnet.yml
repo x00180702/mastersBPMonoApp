@@ -17,13 +17,13 @@ jobs:
       with:
         resourceGroupName: ${{ secrets.RESOURCE_GROUP_NAME_DEV }}
         appName: ${{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV }}
-        slot-name: 'Testing (BloodPressureCalculator/Testing)'
+        slot-name: testing
 
     - name: Deploy FunctionApp
       uses: Azure/functions-action@v1
       with:
         app-name: ${{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV }}
-        slot-name: 'Testing (BloodPressureCalculator/Testing)'
+        slot-name: testing
         package:  .
         publish-profile: ${{ steps.publishprofile.outputs.profile }}
 
