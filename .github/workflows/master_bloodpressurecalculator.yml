@@ -141,7 +141,7 @@ jobs:
         with:
           dotnet-version: '5.0.x'
         
-    # Run Selenium tests
+    # Run Selenium test
       - name: Run Selenium tests
         run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --verbosity normal -l:trx
 
