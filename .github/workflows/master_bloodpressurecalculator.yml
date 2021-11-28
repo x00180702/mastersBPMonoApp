@@ -138,13 +138,6 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp   
           
           
-    # login to Azure account
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}    
-          
-      - name: Create slot on staging site
-        run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot BloodPressureCalculator-Testing    
 
 
   deploy:
