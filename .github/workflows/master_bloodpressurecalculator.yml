@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'BloodPressureCalculator'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5EADBF84C3464C86BA02000CFD4F8698 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8C0DFCCD4A214005A346898617210F7F }}
           package: .
