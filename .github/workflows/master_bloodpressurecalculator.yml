@@ -103,6 +103,23 @@ jobs:
         name: ZAPreport
         path: /report/zapreport.html
         
+  dependency_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Depcheck
+        uses: dependency-check/Dependency-Check_Action@main
+        id: Depcheck
+        with:
+          project: 'BloodPressureCalculator'
+          path: '.'
+          format: 'HTML'    
+          args: >
+            --failOnCVSS 7            
+          # fail if CVSS score (CVE scoring system) is High >=7
+        
   selenium_test:
     runs-on: ubuntu-latest
     needs: build
