@@ -1,12 +1,8 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - x00180702bpApp
-env:
-  AZURE_WEBAPP_NAME: BloodPressureCalculator   
-  URI: https://bloodpressurecalculator.azurewebsites.net 
+name: Build and deploy ASP.Net Core app to Azure Web App - BloodPressureCalculator
 
-  
 on:
   push:
     branches:
@@ -15,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -25,136 +21,9 @@ jobs:
         with:
           dotnet-version: '5.0.x'
           include-prerelease: true
-          
-      - name: Install dependencies
-        run: dotnet restore
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
-      - name: Run unit tests
-        run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
-        
-      - name: Publish Unit Test Results
-        uses: dorny/test-reporter@v1
-        with:
-          artifact: ''
-          name: MS Tests                  
-          path: '**.trx'
-          reporter: 'dotnet-trx' 
-          
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    
-    - name: Set up dotnet
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.x'
-
-    - name: Install dependencies
-      run: dotnet restore
-
-    - name: Sonarqube Begin
-      run: | 
-          dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /o:x00180702 /k:x00180702_bp /d:sonar.login=${{ secrets.SONAR_TOKEN }} /s:$GITHUB_WORKSPACE/SonarQube.Analysis.xml
-
-    - name: Build
-      run: dotnet build
-
-    - name: Test with the dotnet CLI
-      run: dotnet test --settings coverlet.runsettings --logger:trx
-      env:
-          ASPNETCORE_ENVIRONMENT: Development
-
-    - name: Sonarqube end
-      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  k6_load_test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Pull Docker image for k6
-      run: docker pull loadimpact/k6
-
-    - name: Run k6 load test, capture report
-      run: docker run -i loadimpact/k6 run - <k6Tests/performanceTestScript.js > k6report.txt
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: k6report
-        path: k6report.txt
-        
-        
-  zapCheck:
-    name: zapChecker
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Pull Docker image for ZAP
-      run: docker pull owasp/zap2docker-weekly
-    - name: Run baseline scan
-      run: docker run -v /report:/zap/wrk/:rw --user root -t owasp/zap2docker-weekly zap-baseline.py -t ${{env.URI}} -I -r zapreport.html
-  
-    - uses: actions/upload-artifact@v2
-      name: upload ZAP report
-      with:
-        name: ZAPreport
-        path: /report/zapreport.html
-        
-        
-  dependency_check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Depcheck
-        uses: dependency-check/Dependency-Check_Action@main
-        id: Depcheck
-        with:
-          project: 'BMI'
-          path: '.'
-          format: 'HTML'    
-          args: >
-            --failOnCVSS 7            
-          # fail if CVSS score (CVE scoring system) is High >=7
-          
-      - name: Upload Test results
-        uses: actions/upload-artifact@master
-        with:
-           name: Depcheck report
-           path: ${{github.workspace}}/reports
-        
-  selenium_test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.x'
-        
-    # Run Selenium test
-      - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --verbosity normal -l:trx
-
-        
-    # Upload results of selenium tests
-      - name: Publish Selenium Test Results
-        uses: dorny/test-reporter@v1
-        with:
-          artifact: ''
-          name: Selenium Results                  
-          path: '**.trx'
-          reporter: 'dotnet-trx' 
-
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -163,28 +32,26 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp   
-                
+          path: ${{env.DOTNET_ROOT}}/myapp
+
   deploy:
-    runs-on: ubuntu-latest
-    needs: selenium_test
+    runs-on: windows-latest
+    needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      
-
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: .net-app
- 
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}  
+          app-name: 'BloodPressureCalculator'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CCCC796DBBAC4C2286F319E46AA474E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5EADBF84C3464C86BA02000CFD4F8698 }}
           package: .
