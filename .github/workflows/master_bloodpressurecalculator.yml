@@ -194,7 +194,7 @@ jobs:
         app-name: bloodpressurecalculator
         slot-name: testing
         publish-profile: ${{ steps.publishprofile.outputs.profile }}
-        package: .
+        package: 'build'
    
   selenium_test:
     runs-on: ubuntu-latest
