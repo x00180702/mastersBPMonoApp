@@ -8,27 +8,18 @@ jobs:
     steps:
     - name: Checkout the repo
       uses: actions/checkout@v2
-
-    - name: Get FunctionApp publish profile
-      id: publishprofile
-      uses: aliencube/publish-profile-actions@v1
+      
+    - name: Get WebApp publish profile
+      id: webapp
+      uses: ./
       env:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       with:
         resourceGroupName: ${{ secrets.RESOURCE_GROUP_NAME_DEV }}
         appName: ${{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV }}
         slot-name: testing
-        
-        
-    - name: Login
-      uses: azure/login@v1
-      with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-    - name: Deploy FunctionApp
-      uses: Azure/webapps-deploy@v2
-      with:
-        app-name: ${{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV }}
-        slot-name: testing
-        package:  .
-        publish-profile: ${{ steps.publishprofile.outputs.profile }}
+       
+    - name: Show WebApp Profile
+      shell: bash
+      run: |
+        echo "WebApp: ${{ steps.webapp.outputs.profile }}"
