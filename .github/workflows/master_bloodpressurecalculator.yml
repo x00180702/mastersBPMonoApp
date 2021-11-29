@@ -164,20 +164,29 @@ jobs:
         url: ${{ steps.deploy-to-testing-slot.outputs.webapp-url }}
         
         
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: .net-app
-        
-        
+  deploy_testing_slot:       
+    name: deploy to staging slot, run E2E tests, swap slots
+    needs: create_slot
+    environment:
+      name: QA
+      url: https://bloodpressurecalculator-testing.azurewebsites.net/                                 
+    runs-on: ubuntu-latest
+    env:
+      AZURE_WEBAPP_NAME: bloodpressurecalculator-testing            # set this to your application's name
+      AZURE_WEBAPP_PACKAGE_PATH: 'publish'              # set this to the path to your web app project
+    steps:
+    - uses: actions/checkout@v2
+
+    # publish web app ready for deployment
+    - name: Publish web app
+      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
+            
      # deploy to testing slot using new profile
     - name: Login
       uses: azure/login@v1
       with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-
-          
+      
     - name: Deploy to Testing
       id: deploy-to-testing-slot
       uses: azure/webapps-deploy@v2
@@ -185,7 +194,7 @@ jobs:
         app-name: bloodpressurecalculator
         slot-name: testing
         publish-profile: ${{ steps.publishprofile.outputs.profile }}
-        package:  .
+        package:  '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
    
   selenium_test:
     runs-on: ubuntu-latest
