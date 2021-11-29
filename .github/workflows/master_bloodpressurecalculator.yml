@@ -162,17 +162,21 @@ jobs:
         resourceGroupName: ${{ secrets.RESOURCE_GROUP_NAME_DEV }}
         appName: ${{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV }}
         url: ${{ steps.deploy-to-testing-slot.outputs.webapp-url }}
-
+        
+        
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v2
+      with:
+        name: .net-app
+        
+        
      # deploy to testing slot using new profile
     - name: Login
       uses: azure/login@v1
       with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: .net-app
+
           
     - name: Deploy to Testing
       id: deploy-to-testing-slot
@@ -180,8 +184,8 @@ jobs:
       with:
         app-name: bloodpressurecalculator
         slot-name: testing
-        package:  .
         publish-profile: ${{ steps.publishprofile.outputs.profile }}
+        package:  .
    
   selenium_test:
     runs-on: ubuntu-latest
