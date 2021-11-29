@@ -120,24 +120,20 @@ jobs:
             --failOnCVSS 7            
           # fail if CVSS score (CVE scoring system) is High >=7
           
-    # login to Azure account
+    # login to Azure account  
+  create_slot:
+    runs-on: ubuntu-latest
+    steps:
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}    
-          
-          
-  create_testing_slot:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Create slot on staging site
         run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot testing
-        
-        
+               
   build_test_deploy_testing_slot:
     name: 'FunctionApp Build, Test & Deploy'
+    needs: create_slot
     runs-on: ubuntu-latest
-    needs: create_testing_slot
     steps:
     - name: Checkout the repo
       uses: actions/checkout@v2
@@ -200,9 +196,6 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp   
           
-          
-
-
   deploy:
     runs-on: ubuntu-latest
     needs: selenium_test
