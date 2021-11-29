@@ -120,32 +120,14 @@ jobs:
             --failOnCVSS 7            
           # fail if CVSS score (CVE scoring system) is High >=7
           
+    # login to Azure account
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}    
           
-  deploy_test_blue_green:                                             
-    name: deploy to staging slot, run E2E tests, swap slots
-    needs: build
-    environment:
-      name: testing
-      url: https://bloodpressurecalculator-testing.azurewebsites.net                                
-    runs-on: ubuntu-latest
-    env:
-      AZURE_WEBAPP_NAME: bloodpressurecalculator           # set this to your application's name
-      AZURE_WEBAPP_PACKAGE_PATH: 'publish'              # set this to the path to your web app project
-    steps:
-    - uses: actions/checkout@v2
+      - name: Create slot on staging site
+        run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot testing             
 
-    # publish web app ready for deployment
-    - name: Publish web app
-      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
-    
-    # Deploy to Azure app service to staging slot using publish profile for staging slot
-    - name: Run Azure webapp deploy action using publish profile credentials
-      uses: azure/webapps-deploy@v2
-      with: 
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}                            
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}     # Define secret variable in environment
-        slot-name: staging
-        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
         
   selenium_test:
     runs-on: ubuntu-latest
