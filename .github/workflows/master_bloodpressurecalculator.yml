@@ -39,6 +39,15 @@ jobs:
           path: '**.trx'
           reporter: 'dotnet-trx' 
           
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+          
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
@@ -160,9 +169,14 @@ jobs:
       with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
     
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v2
+      with:
+        name: .net-app
+          
     - name: Deploy to Testing
-      uses: azure/webapps-deploy@v2
       id: deploy-to-testing-slot
+      uses: azure/webapps-deploy@v2
       with:
         app-name: bloodpressurecalculator
         slot-name: testing
