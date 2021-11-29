@@ -166,7 +166,7 @@ jobs:
         
   deploy_testing_slot:       
     name: deploy to staging slot, run E2E tests, swap slots
-    needs: create_slot
+    needs: build_test_deploy_testing_slot
     environment:
       name: QA
       url: https://bloodpressurecalculator-testing.azurewebsites.net/                                 
