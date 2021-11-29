@@ -3,7 +3,8 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App - BloodPressureCalculator
 env:
-  URI: https://bloodpressurecalculator.azurewebsites.net 
+  URI: https://bloodpressurecalculator.azurewebsites.net
+  AZURE_WEBAPP_PACKAGE_PATH: 'publish'
 on:
   push:
     branches:
@@ -122,6 +123,7 @@ jobs:
           
     # login to Azure account  
   create_slot:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: azure/login@v1
@@ -137,8 +139,12 @@ jobs:
     steps:
     - name: Checkout the repo
       uses: actions/checkout@v2
+      
+      
+    - name: Publish web app
+      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
 
-    - name: Get FunctionApp publish profile
+    - name: Get publish profile
       id: publishprofile
       uses: aliencube/publish-profile-actions@v1
       env:
@@ -153,7 +159,7 @@ jobs:
       with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: Deploy to Staging
+    - name: Deploy to Testing
       uses: azure/webapps-deploy@v2
       with:
         app-name: bloodpressurecalculator
