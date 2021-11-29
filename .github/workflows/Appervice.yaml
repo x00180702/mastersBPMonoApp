@@ -27,7 +27,7 @@ jobs:
     - name: Deploy FunctionApp
       uses: Azure/webapps-deploy@v2
       with:
-        app-name: ${{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV }}
+        app-name: bloodpressurecalculator
         slot-name: testing
         package:  .
         publish-profile: ${{ steps.publishprofile.outputs.profile }}
