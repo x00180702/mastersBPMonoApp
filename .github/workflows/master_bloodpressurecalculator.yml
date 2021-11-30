@@ -148,10 +148,6 @@ jobs:
     - name: Checkout the repo
       uses: actions/checkout@v2
       
-      # publish web app ready for deployment
-    - name: Publish web app
-      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
-      
       # get the new publish profile for testing slot
     - name: Get publish profile
       id: publishprofile
@@ -162,6 +158,12 @@ jobs:
         resourceGroupName: ${{ secrets.RESOURCE_GROUP_NAME_DEV }}
         appName: ${{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV }}
         url: ${{ steps.deploy-to-testing-slot.outputs.webapp-url }}
+      
+      # publish web app ready for deployment
+    - name: Publish web app
+      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
+      
+
         
         
   deploy_testing_slot:       
@@ -173,7 +175,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AZURE_WEBAPP_NAME: bloodpressurecalculator-testing            # set this to your application's name
-      AZURE_WEBAPP_PACKAGE_PATH: 'build'              # set this to the path to your web app project
+      AZURE_WEBAPP_PACKAGE_PATH: './build'              # set this to the path to your web app project
     steps:
     - uses: actions/checkout@v2
 
