@@ -33,7 +33,7 @@ jobs:
           
           
           
- create_slot:
+  create_slot:
     needs: build
     runs-on: ubuntu-latest
     steps:
