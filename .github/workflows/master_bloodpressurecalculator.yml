@@ -129,30 +129,72 @@ jobs:
             --failOnCVSS 7            
           # fail if CVSS score (CVE scoring system) is High >=7
              
+
+
+# login to Azure account  
+  create_slot:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Create slot on staging site
+        run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot staging
+               
+  build_test_deploy_testing_slot:
+    name: 'Testing Slot Build, Test & Deploy'
+    needs: create_slot
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v2
+      
+      # get the new publish profile for testing slot
+    - name: Get publish profile
+      id: publishprofile
+      uses: aliencube/publish-profile-actions@v1
+      env:
+        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      with:
+        resourceGroupName: ${{ secrets.RESOURCE_GROUP_NAME_DEV }}
+        appName: ${{ secrets.RESOURCE_FUNCTIONAPP_NAME_DEV }}
+        url: ${{ steps.deploy-to-staging-slot.outputs.webapp-url }}
+      
+      # publish web app ready for deployment
+    - name: Publish web app
+      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
+      
+
+        
+        
   deploy_testing_slot:       
     name: deploy to staging slot
-    needs: build
+    needs: build_test_deploy_testing_slot
     environment:
       name: testing
       url: https://bloodpressurecalculator-staging.azurewebsites.net/                                 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-
-    # publish web app ready for deployment
-    - name: Publish web app
-      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app
             
-
+     # deploy to testing slot using new profile
+      - name: Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-    - name: Deploy to Testing
-      id: deploy-to-testing-slot
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'bloodpressurecalculator'
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_TESTING_SLOT }}
-        slot-name: 'staging'
-        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+      - name: Deploy to Testing
+        id: deploy-to-testing-slot
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: bloodpressurecalculator
+          slot-name: staging
+          publish-profile: ${{ steps.publishprofile.outputs.profile }}
+          package: .
         
   selenium_test:
     runs-on: ubuntu-latest
