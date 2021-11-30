@@ -138,7 +138,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Create slot on staging site
-        run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot testing
+        run: az webapp deployment slot create --name BloodPressureCalculator --resource-group BloodPressureCalculator --slot testing --configuration-source
                
   build_test_deploy_testing_slot:
     name: 'Testing Slot Build, Test & Deploy'
