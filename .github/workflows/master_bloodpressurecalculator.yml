@@ -134,11 +134,11 @@ jobs:
     needs: build
     environment:
       name: testing
-      url: https://bloodpressurecalculator-testing.azurewebsites.net/                                 
+      url: https://bloodpressurecalculator-staging.azurewebsites.net/                                 
     runs-on: ubuntu-latest
     env:
-      AZURE_WEBAPP_NAME: bloodpressurecalculator-testing            # set this to your application's name
-      AZURE_WEBAPP_PACKAGE_PATH: './build'              # set this to the path to your web app project
+      AZURE_WEBAPP_NAME: bloodpressurecalculator-staging                                   # set this to your application's name
+      AZURE_WEBAPP_PACKAGE_PATH: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'              # set this to the path to your web app project
     steps:
     - uses: actions/checkout@v2
 
@@ -157,7 +157,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'BloodPressureCalculator'
-        slot-name: 'testing'
+        slot-name: 'staging'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_TESTING_SLOT }}
         package: .
         
