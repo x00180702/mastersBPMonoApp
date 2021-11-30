@@ -165,15 +165,15 @@ jobs:
         
         
   deploy_testing_slot:       
-    name: deploy to staging slot, run E2E tests, swap slots
+    name: deploy to staging slot
     needs: build_test_deploy_testing_slot
     environment:
-      name: QA
+      name: testing
       url: https://bloodpressurecalculator-testing.azurewebsites.net/                                 
     runs-on: ubuntu-latest
     env:
       AZURE_WEBAPP_NAME: bloodpressurecalculator-testing            # set this to your application's name
-      AZURE_WEBAPP_PACKAGE_PATH: 'publish'              # set this to the path to your web app project
+      AZURE_WEBAPP_PACKAGE_PATH: 'build'              # set this to the path to your web app project
     steps:
     - uses: actions/checkout@v2
 
@@ -191,8 +191,8 @@ jobs:
       id: deploy-to-testing-slot
       uses: azure/webapps-deploy@v2
       with:
-        app-name: bloodpressurecalculator
-        slot-name: testing
+        app-name: 'BloodPressureCalculator'
+        slot-name: 'testing'
         publish-profile: ${{ steps.publishprofile.outputs.profile }}
         package: .
    
