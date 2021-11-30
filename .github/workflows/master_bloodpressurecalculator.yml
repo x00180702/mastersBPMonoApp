@@ -138,7 +138,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AZURE_WEBAPP_NAME: bloodpressurecalculator-staging                                   # set this to your application's name
-      AZURE_WEBAPP_PACKAGE_PATH: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'              # set this to the path to your web app project
+      AZURE_WEBAPP_PACKAGE_PATH: 'publish'              # set this to the path to your web app project
     steps:
     - uses: actions/checkout@v2
 
