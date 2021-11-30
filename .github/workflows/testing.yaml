@@ -51,7 +51,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'BloodPressureCalculator'
-          slot-name: 'Staging'
+          app-name: 'bloodpressurecalculator/staging'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_TESTING_SLOT }}
           package: .
