@@ -92,8 +92,5 @@ namespace BPCalculatorAcceptanceTests.Steps
             Assert.AreEqual("Systolic must be greater than Diastolic", actualValue);
         }
 
-
-
-
     }
 }
