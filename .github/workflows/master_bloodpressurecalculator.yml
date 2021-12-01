@@ -44,7 +44,7 @@ jobs:
           reporter: 'dotnet-trx' 
           
       - name: Run Specflow tests
-        run: dotnet test SpecflowAcceptanceTests/SpecflowAcceptanceTests.csproj --verbosity normal
+        run: dotnet test SpecFlowAcceptanceTests/SpecFlowAcceptanceTests.csproj --verbosity normal
           
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
