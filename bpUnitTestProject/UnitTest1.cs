@@ -65,7 +65,7 @@ namespace bpUnitTestProject
         [InlineData(195, 39)] //low range
         [InlineData(200, 23)] //mid range
         [InlineData(191, 101)] //high range
-        [InlineData(40, 60)] //Systolic lower then Diastolic
+        [InlineData(80, 81)] //Systolic lower then Diastolic
         public void TestMethodInvalidVariables(int s, int d)
         {
 
