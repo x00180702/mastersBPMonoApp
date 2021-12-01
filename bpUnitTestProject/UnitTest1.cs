@@ -110,7 +110,6 @@ namespace bpUnitTestProject
         [Theory]
         [InlineData(90, 60)]
         [InlineData(139, 89)]
-        [InlineData(139, 89)]
         [InlineData(90, 45)]
         [InlineData(75, 60)]
         public void Test_for_values_outside_low_range(int s, int d)
