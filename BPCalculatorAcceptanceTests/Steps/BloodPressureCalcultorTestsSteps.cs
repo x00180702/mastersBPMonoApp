@@ -89,7 +89,7 @@ namespace BPCalculatorAcceptanceTests.Steps
         public void ThenSystolicMustBeGreaterThanDiastolicMessageIsDiplayedOnTheBloodPressureCalcultorPage()
         {
             string actualValue = _calculatorPageObject.getWarningMessage();
-            Assert.AreEqual("Systolic must be greater than Diastolic", actualValue,);
+            Assert.AreEqual("Systolic must be greater than Diastolic", actualValue);
         }
 
 
