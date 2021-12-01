@@ -1,14 +1,14 @@
 ﻿using System;
-using TechTalk.SpecFlow;
 using BPCalculator;
 using NUnit.Framework;
+using TechTalk.SpecFlow;
 
 namespace SpecFlowAcceptanceTests.Features
 {
     [Binding]
     public class CheckBloodPressureValuesSteps
     {
-        private BloodPressure bloodPressure;
+        private BloodPressure? bloodPressure;
 
         [Given(@"user enters (.*) in Systolic")]
         public void GivenUserEntersInSystolic(String value)
@@ -19,7 +19,7 @@ namespace SpecFlowAcceptanceTests.Features
                 Systolic = sys
             };
         }
-        
+
         [Given(@"user enters (.*) in Diastolic")]
         public void GivenUserEntersInDiastolic(String value)
         {
@@ -33,7 +33,7 @@ namespace SpecFlowAcceptanceTests.Features
         [Then("the result should be (.*)")]
         public void ThenTheResultShouldBe(string result)
         {
-            Assert.AreEqual(bloodPressure.Category.ToString(), result);        
+            Assert.AreEqual(bloodPressure.Category.ToString(), result);
         }
-    }   
+    }
 }

@@ -81,7 +81,7 @@ namespace BPCalculatorAcceptanceTests.Steps
         public void ThenPleaseEnterAValidNumberMessageIsDiplayedUnderTheFieldTextboxOnTheBloodPressureCalcultorPage(string expectedValue)
         {
             string actualValue = _calculatorPageObject.getInvalidMessage(expectedValue);
-            Assert.AreEqual(actualValue, "Please enter a valid number.");
+            Assert.AreEqual("Please enter a valid number." , actualValue);
         }
 
 
@@ -89,7 +89,7 @@ namespace BPCalculatorAcceptanceTests.Steps
         public void ThenSystolicMustBeGreaterThanDiastolicMessageIsDiplayedOnTheBloodPressureCalcultorPage()
         {
             string actualValue = _calculatorPageObject.getWarningMessage();
-            Assert.AreEqual(actualValue, "Systolic must be greater than Diastolic");
+            Assert.AreEqual("Systolic must be greater than Diastolic", actualValue,);
         }
 
 

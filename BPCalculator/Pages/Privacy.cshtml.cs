@@ -14,6 +14,7 @@ namespace BPCalculator.Pages
 
         public void OnGet()
         {
+            //Not impletmented yet. 
         }
     }
 }
