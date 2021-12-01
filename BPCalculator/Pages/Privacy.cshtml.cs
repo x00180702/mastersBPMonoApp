@@ -5,7 +5,7 @@ namespace BPCalculator.Pages
 {
     public class PrivacyModel : PageModel
     {
-         ILogger<PrivacyModel> _logger;
+        private readonly ILogger<PrivacyModel> _logger;
 
         public PrivacyModel(ILogger<PrivacyModel> logger)
         {
