@@ -29,10 +29,12 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+        
+        
       - name: Run unit tests
         run: dotnet test bpUnitTestProject/bpUnitTestProject.csproj --no-restore --collect "Code coverage" -l:trx
      
-        #running unit tests
+        #publish unit test results
       - name: Publish Unit Test Results
         uses: dorny/test-reporter@v1
         with:
@@ -40,6 +42,9 @@ jobs:
           name: MS Tests                  
           path: '**.trx'
           reporter: 'dotnet-trx' 
+          
+      - name: Run Specflow tests
+        run: dotnet test SpecflowAcceptanceTests/SpecflowAcceptanceTests.csproj --verbosity normal
           
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -208,7 +213,7 @@ jobs:
         
     # Run Selenium tests
       - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculatorAcceptanceTests.csproj --verbosity normal -l:trx
+        run: dotnet test BPCalculator_SeleniumTests/BPCalculator_SeleniumTests.csproj --verbosity normal -l:trx
 
         
     # Upload results of selenium tests
