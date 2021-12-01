@@ -84,7 +84,6 @@ namespace BPCalculatorAcceptanceTests.Steps
             Assert.AreEqual("Please enter a valid number." , actualValue);
         }
 
-
         [Then(@"Systolic must be greater than Diastolic message is diplayed on the Blood Pressure Calcultor Page")]
         public void ThenSystolicMustBeGreaterThanDiastolicMessageIsDiplayedOnTheBloodPressureCalcultorPage()
         {
