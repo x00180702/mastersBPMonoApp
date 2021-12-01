@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace BPCalculatorAcceptanceTests.Features
+namespace BPCalculator_SeleniumTests.Features
 {
     using TechTalk.SpecFlow;
     using System;
