@@ -1,7 +1,7 @@
-﻿using BPCalculatorAcceptanceTests.PageObjects;
-using BPCalculatorAcceptanceTests.Drivers;
-using TechTalk.SpecFlow;
+﻿using BPCalculatorAcceptanceTests.Drivers;
+using BPCalculatorAcceptanceTests.PageObjects;
 using NUnit.Framework;
+using TechTalk.SpecFlow;
 
 namespace BPCalculatorAcceptanceTests.Steps
 {

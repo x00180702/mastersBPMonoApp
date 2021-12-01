@@ -1,7 +1,6 @@
 ﻿using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium.Chrome;
 
 namespace BPCalculatorAcceptanceTests.PageObjects
 {
@@ -51,7 +50,7 @@ namespace BPCalculatorAcceptanceTests.PageObjects
         {
             //Clear text box
             systolicElement.Clear();
-        
+
 
         }
 
@@ -68,8 +67,8 @@ namespace BPCalculatorAcceptanceTests.PageObjects
             //Clear text box
             diastolicElement.Clear();
 
-      
-   
+
+
         }
 
         public void clickSubmitButton()

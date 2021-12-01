@@ -10,12 +10,12 @@ namespace bpUnitTestProject
 
         //Unit test to check LOW blood pressure
         [Theory]
-        [InlineData(70,40)] //low range
-        [InlineData(82,48)] //mid range
-        [InlineData(89,59)] //high range
+        [InlineData(70, 40)] //low range
+        [InlineData(82, 48)] //mid range
+        [InlineData(89, 59)] //high range
         public void TestMethodLowVariables(int s, int d)
         {
-      
+
             BP = new BloodPressure() { Systolic = s, Diastolic = d };
             Assert.Equal(BPCategory.Low, BP.Category);
 
@@ -81,7 +81,7 @@ namespace bpUnitTestProject
         public void Test_for_values_outside_high_range(int s, int d)
         {
             BP = new BloodPressure() { Systolic = s, Diastolic = d };
-            Assert.InRange(d,BloodPressure.DiastolicMin,BloodPressure.DiastolicMax);
+            Assert.InRange(d, BloodPressure.DiastolicMin, BloodPressure.DiastolicMax);
             Assert.NotEqual(BPCategory.High, BP.Category);
         }
 
