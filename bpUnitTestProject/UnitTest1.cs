@@ -65,7 +65,6 @@ namespace bpUnitTestProject
         [InlineData(195, 39)] //low range
         [InlineData(200, 23)] //mid range
         [InlineData(191, 101)] //high range
-        [InlineData(80, 81)] //Systolic lower then Diastolic
         public void TestMethodInvalidVariables(int s, int d)
         {
 
@@ -82,7 +81,7 @@ namespace bpUnitTestProject
         public void Test_for_values_outside_high_range(int s, int d)
         {
             BP = new BloodPressure() { Systolic = s, Diastolic = d };
-            Assert.InRange(d,BloodPressure.DiastolicMin, BPCalculator.BloodPressure.DiastolicMax);
+            Assert.InRange(d,BloodPressure.DiastolicMin,BloodPressure.DiastolicMax);
             Assert.NotEqual(BPCategory.High, BP.Category);
         }
 
@@ -93,7 +92,7 @@ namespace bpUnitTestProject
         public void Test_for_values_outside_prehigh_range(int s, int d)
         {
             BP = new BloodPressure() { Systolic = s, Diastolic = d };
-            Assert.InRange(d, BloodPressure.DiastolicMin, BPCalculator.BloodPressure.DiastolicMax);
+            Assert.InRange(d, BloodPressure.DiastolicMin, BloodPressure.DiastolicMax);
             Assert.NotEqual(BPCategory.PreHigh, BP.Category);
         }
 
@@ -104,17 +103,20 @@ namespace bpUnitTestProject
         public void Test_for_values_outside_ideal_range(int s, int d)
         {
             BP = new BloodPressure() { Systolic = s, Diastolic = d };
-            Assert.InRange(d, BloodPressure.DiastolicMin, BPCalculator.BloodPressure.DiastolicMax);
+            Assert.InRange(d, BloodPressure.DiastolicMin, BloodPressure.DiastolicMax);
             Assert.NotEqual(BPCategory.Ideal, BP.Category);
         }
 
         [Theory]
         [InlineData(90, 60)]
         [InlineData(139, 89)]
+        [InlineData(139, 89)]
+        [InlineData(90, 45)]
+        [InlineData(75, 60)]
         public void Test_for_values_outside_low_range(int s, int d)
         {
             BP = new BloodPressure() { Systolic = s, Diastolic = d };
-            Assert.InRange(d, BloodPressure.DiastolicMin, BPCalculator.BloodPressure.DiastolicMax);
+            Assert.InRange(d, BloodPressure.DiastolicMin, BloodPressure.DiastolicMax);
             Assert.NotEqual(BPCategory.Low, BP.Category);
         }
     }
