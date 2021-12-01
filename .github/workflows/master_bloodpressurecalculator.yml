@@ -213,7 +213,7 @@ jobs:
         
     # Run Selenium tests
       - name: Run Selenium tests
-        run: dotnet test BPCalculator_SeleniumTests/BPCalculator_SeleniumTests.csproj --verbosity normal -l:trx
+        run: dotnet test BPCalculatorAcceptanceTests/BPCalculator_SeleniumTests.csproj --verbosity normal -l:trx
 
         
     # Upload results of selenium tests
