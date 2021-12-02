@@ -16,7 +16,7 @@ export let options = {
   // then ramp down to 0 over a minute i.e. ramp-up pattern of "load"
   stages: [
     { duration: "1m", target: 20 },            // 1 new vu every 3 seconds
-    { duration: "1m", target: 20 },
+    { duration: "1m", target: 40 },
     { duration: "1m", target: 0 }             // 1 less vu every 3 seconds
   ],
   
@@ -82,8 +82,8 @@ export default function() {
   // now POST form with cookie set and hidden field set to anti forgery token etc. 
   // POST with random data to prevent server cached response to POST, discard response body
   res = res.submitForm({
-    fields: { BP_Systolic: getRandomInt(5, 50).toString(), 
-              BP_Diastolic: getRandomInt(4, 7).toString()}
+    fields: { BP_Systolic: getRandomInt(70, 190).toString(), 
+              BP_Diastolic: getRandomInt(40, 100).toString()}
   });
 
   check(res, {
