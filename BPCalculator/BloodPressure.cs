@@ -12,7 +12,6 @@ namespace BPCalculator
         [Display(Name = "High Blood Pressure")] High,
         [Display(Name = "Values entered are not valid")] NotValid,
 
-
     };
 
     public class BloodPressure
@@ -35,9 +34,7 @@ namespace BPCalculator
             {
                 if (Systolic <= 89 && Diastolic <= 59)
                 {
-
                     return BPCategory.Low;
-
                 }
                 else
                 if ((Systolic > 90 && Systolic <= 119 || Diastolic >= 60 && Diastolic < 79))
@@ -56,7 +53,6 @@ namespace BPCalculator
                 }
                 else
                 {
-
                     return BPCategory.NotValid;
                 }
             }
