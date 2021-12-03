@@ -12,6 +12,7 @@ namespace BPCalculator
         [Display(Name = "High Blood Pressure")] High,
         [Display(Name = "Values entered are not valid")] NotValid,
 
+
     };
 
     public class BloodPressure
