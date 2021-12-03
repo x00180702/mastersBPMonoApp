@@ -110,13 +110,13 @@ jobs:
            name: Depcheck report
            path: ${{github.workspace}}/reports
            
-  ## -- Run acceptance tests
-  acceptance_tests:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Specflow tests
-        run: dotnet test SpecFlowAcceptanceTests/SpecFlowAcceptanceTests.csproj --verbosity normal
+#   ## -- Run acceptance tests
+#   acceptance_tests:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Run Specflow tests
+#         run: dotnet test SpecFlowAcceptanceTests/SpecFlowAcceptanceTests.csproj --verbosity normal
 
 
   ## -- Create a staging slot if the build step is completed 
@@ -201,14 +201,14 @@ jobs:
 #         run: dotnet test BPCalculatorAcceptanceTests/BPCalculator_SeleniumTests.csproj --verbosity normal -l:trx
 
         
-    # Upload results of selenium tests
-      - name: Publish Selenium Test Results
-        uses: dorny/test-reporter@v1
-        with:
-          artifact: ''
-          name: Selenium Results                  
-          path: '**.trx'
-          reporter: 'dotnet-trx' 
+#     # Upload results of selenium tests
+#       - name: Publish Selenium Test Results
+#         uses: dorny/test-reporter@v1
+#         with:
+#           artifact: ''
+#           name: Selenium Results                  
+#           path: '**.trx'
+#           reporter: 'dotnet-trx' 
 
 
       - name: dotnet publish
