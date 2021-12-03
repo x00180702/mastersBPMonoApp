@@ -266,6 +266,7 @@ jobs:
   deploy_to_production:
     runs-on: ubuntu-latest
     needs: k6_load_test
+    name: Production
     steps:
      - uses: azure/login@v1
        with:
