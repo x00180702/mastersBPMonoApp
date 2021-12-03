@@ -15,8 +15,10 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Gherkin" Version="22.0.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights" Version="2.19.0" />
 		<PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.19.0" />
 		<PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.19.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel" Version="2.19.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.19.0" />
 		<PackageReference Include="Microsoft.VisualStudio.TestPlatform" Version="14.0.0" />
 		
