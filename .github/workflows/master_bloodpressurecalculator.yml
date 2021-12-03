@@ -7,8 +7,9 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: 'publish'
 on:
   push:
-    branches:
-      - master
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:                              #build job
