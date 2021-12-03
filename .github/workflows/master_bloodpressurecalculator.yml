@@ -257,7 +257,7 @@ jobs:
   ## swap slots if selenium automated tests have passed  
   deploy_to_production:
     runs-on: ubuntu-latest
-    needs: zapChecker
+    needs: zapCheck
     steps:
      - uses: azure/login@v1
        with:
