@@ -126,7 +126,7 @@ jobs:
 
   ## -- Create a staging slot if the build step is completed 
   create_slot:
-    needs: build
+    needs: [build , dependency_check]
     runs-on: ubuntu-latest
     steps:
       - uses: azure/login@v1
