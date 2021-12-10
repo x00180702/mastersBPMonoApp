@@ -126,7 +126,7 @@ jobs:
 
   ## -- Create a staging slot if the build step is completed 
   create_slot:
-    needs: [build , dependency_check]
+    needs: [build , dependency_check, sonarcloud]
     runs-on: ubuntu-latest
     steps:
       - uses: azure/login@v1
@@ -248,7 +248,7 @@ jobs:
    ## Run looad testing if the staging slot is created       
   k6_load_test:
     runs-on: ubuntu-latest
-    needs: zapCheck
+    needs: [zapCheck, selenium_test]
     steps:
     - uses: actions/checkout@v2
     - name: Pull Docker image for k6
