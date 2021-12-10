@@ -126,7 +126,7 @@ jobs:
 
   ## -- Create a staging slot if the build step is completed 
   create_slot:
-    needs: [build , dependency_check, sonarcloud]
+    needs: [build , dependency_check, sonarcloud, acceptance_tests]
     runs-on: ubuntu-latest
     steps:
       - uses: azure/login@v1
