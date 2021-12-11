@@ -77,7 +77,6 @@ namespace SpecFlowAcceptanceTests.Features
         [NUnit.Framework.DescriptionAttribute("Check value for calculations")]
         [NUnit.Framework.CategoryAttribute("mytag")]
         [NUnit.Framework.TestCaseAttribute("70", "59", "Low", null)]
-        [NUnit.Framework.TestCaseAttribute("105", "62", "Ideal", null)]
         [NUnit.Framework.TestCaseAttribute("121", "89", "PreHigh", null)]
         [NUnit.Framework.TestCaseAttribute("190", "90", "High", null)]
         [NUnit.Framework.TestCaseAttribute("195", "101", "NotValid", null)]

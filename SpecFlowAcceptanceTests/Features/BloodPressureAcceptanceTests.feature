@@ -9,6 +9,5 @@ Scenario Outline: Check value for calculations
 	Examples: 
     | Systolic	| Diastolic |	Result		|
     |    70		|   59		|   Low 		|
-	|    121	|   89		|   PreHigh		|
 	|    190	|   90		|   High 		|
 	|    195	|   101		|   NotValid 	|
