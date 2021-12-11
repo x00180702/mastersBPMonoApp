@@ -11,9 +11,8 @@ namespace SpecFlowAcceptanceTests.Features
         private BloodPressure? bloodPressure;
 
         [Given(@"user enters (.*) in Systolic")]
-        public void GivenUserEntersInSystolic(String value)
+        public void GivenUserEntersInSystolic(int sys)
         {
-            int sys = Int16.Parse(value);
             bloodPressure = new BloodPressure
             {
                 Systolic = sys
@@ -21,14 +20,15 @@ namespace SpecFlowAcceptanceTests.Features
         }
 
         [Given(@"user enters (.*) in Diastolic")]
-        public void GivenUserEntersInDiastolic(String value)
+        public void GivenUserEntersInDiastolic(int dys)
         {
-            int dias = Int16.Parse(value);
             bloodPressure = new BloodPressure
             {
-                Diastolic = dias
+                Diastolic = dys
             };
         }
+
+
 
         [Then("the result should be (.*)")]
         public void ThenTheResultShouldBe(string result)
