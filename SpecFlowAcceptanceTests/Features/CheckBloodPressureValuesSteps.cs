@@ -1,5 +1,4 @@
-﻿using System;
-using BPCalculator;
+﻿using BPCalculator;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 

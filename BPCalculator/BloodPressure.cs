@@ -36,12 +36,12 @@ namespace BPCalculator
                 {
                     return BPCategory.Low;
                 }
-                else if ((Systolic >= 90 && Systolic <= 119) && (Diastolic >= 60 && Diastolic <= 79))
+                else if ((Systolic >= 70 && Systolic <= 119) && (Diastolic >= 40 && Diastolic <= 79))
                 {
                     return BPCategory.Ideal;
                 }
                 else
-                if ((Systolic >= 120 && Systolic <= 139 || Diastolic >= 80 && Diastolic <= 89) && (Systolic >= 81 && Systolic <= 139) && (Diastolic >= 80 && Diastolic <= 89))
+                if ((Systolic >= 120 && Systolic <= 139) && (Diastolic <= 80) || (Systolic >= 81 && Systolic <= 139) && (Diastolic >= 80 && Diastolic <= 89))
                 {
                     return BPCategory.PreHigh;
                 }
