@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:                              #build job
-    runs-on: ubuntu-latest            #running on ubuntu
+    runs-on: ubuntu-latest            #running on windows
 
     steps:
       - uses: actions/checkout@v2     #checking out code
@@ -44,4 +44,7 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp   
+          
+      - name: Publish web app
+        run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
     
