@@ -38,32 +38,6 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
    
-   ## Run selenium tests if slot is created
-  selenium_test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.x'
-        
-    # Run Selenium tests
-      - name: Run Selenium tests
-        run: dotnet test BPCalculatorAcceptanceTests/BPCalculator_SeleniumTests.csproj --verbosity normal -l:trx
-
-        
-    # Upload results of selenium tests
-      - name: Publish Selenium Test Results
-        uses: dorny/test-reporter@v1
-        with:
-          artifact: ''
-          name: Selenium Results                  
-          path: '**.trx'
-          reporter: 'dotnet-trx' 
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
