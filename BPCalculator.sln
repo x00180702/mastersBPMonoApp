@@ -5,27 +5,8 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPCalculator", "BPCalculator\BPCalculator.csproj", "{5966DA6C-819D-4303-ADC7-425B8541EC84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bpUnitTestProject", "bpUnitTestProject\bpUnitTestProject.csproj", "{4A952892-6511-4DB7-AD11-386B73AC3D79}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k6Tests", "k6Tests", "{882C12CE-B8B8-466C-B6BC-4DB5E9AC112F}"
-	ProjectSection(SolutionItems) = preProject
-		performanceTestScript.js = performanceTestScript.js
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BPCalculator_SeleniumTests", "BPCalculatorAcceptanceTests\BPCalculator_SeleniumTests.csproj", "{DE9806EC-2217-45E2-8BB0-601CE83DF164}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5966DA6C-819D-4303-ADC7-425B8541EC84} = {5966DA6C-819D-4303-ADC7-425B8541EC84}
-		{4A952892-6511-4DB7-AD11-386B73AC3D79} = {4A952892-6511-4DB7-AD11-386B73AC3D79}
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sonar Templates and Settings", "Sonar Templates and Settings", "{24023017-71A3-4B9C-A3D7-716E98FF6E4F}"
-	ProjectSection(SolutionItems) = preProject
-		coverlet.runsettings = coverlet.runsettings
-		SonarQube.Analysis.xml = SonarQube.Analysis.xml
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlowAcceptanceTests", "SpecFlowAcceptanceTests\SpecFlowAcceptanceTests.csproj", "{DC303A9B-0E4D-4738-8D84-D9D2C0A5785A}"
-EndProject
+
+
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{08AF2446-76BA-4C30-BA80-84CA3D40D7AC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
