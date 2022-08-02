@@ -5,6 +5,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - BloodPressureCalculat
 env:
   URI: https://bloodpressurecalculator.azurewebsites.net
   AZURE_WEBAPP_PACKAGE_PATH: 'publish'
+  AZURE_WEBAPP_NAME: bloodpressurecalculator
 
 on:
   push:
