@@ -11,15 +11,14 @@ namespace BPCalculator
         [Display(Name = "Pre-High Blood Pressure")] PreHigh,
         [Display(Name = "High Blood Pressure")] High,
         [Display(Name = "Values entered are not valid")] NotValid,
-
     };
-    
+
     public enum Calculations
     {
         [Display(Name = "Mean Arterial Pressure: ")] mapValue,
         [Display(Name = "Pulse Pressure: ")] pulsePressure,
     };
-    
+
     public enum AgeRange
     {
         [Display(Name = "Average value for your age group [15-19] is 120/78")] AgeGroup1,
@@ -41,13 +40,15 @@ namespace BPCalculator
         public const int SystolicMax = 190;
         public const int DiastolicMin = 40;
         public const int DiastolicMax = 100;
+        public const int AgeMin = 14;
+        public const int AgeMax = 100;
 
         [Range(SystolicMin, SystolicMax, ErrorMessage = "Invalid Systolic Value")]
         public int Systolic { get; set; }                       // mmHG
 
         [Range(DiastolicMin, DiastolicMax, ErrorMessage = "Invalid Diastolic Value")]
         public int Diastolic { get; set; }                      // mmHG
-        
+
         [Range(AgeMin, AgeMax, ErrorMessage = "Invalid Age Range. Calculations are for ages over 15 & under 100")]
         public int Age { get; set; }
 
@@ -60,14 +61,17 @@ namespace BPCalculator
             {
                 if (Systolic <= 89 && Diastolic <= 59)
                 {
+
                     return BPCategory.Low;
+
                 }
-                else if ((Systolic >= 70 && Systolic <= 119) && (Diastolic >= 40 && Diastolic <= 79))
+                else
+                if ((Systolic > 90 && Systolic <= 119 || Diastolic >= 60 && Diastolic < 79))
                 {
                     return BPCategory.Ideal;
                 }
                 else
-                if ((Systolic >= 120 && Systolic <= 139) && (Diastolic <= 80) || (Systolic >= 81 && Systolic <= 139) && (Diastolic >= 80 && Diastolic <= 89))
+                if ((Systolic > 120 && Systolic <= 139 || Diastolic >= 80 && Diastolic <= 89))
                 {
                     return BPCategory.PreHigh;
                 }
@@ -83,7 +87,7 @@ namespace BPCalculator
                 }
             }
         }
-        
+
         //Calculation used to get mean arterial pressure from values entered
         public Calculations mapCalulation
         {
@@ -109,7 +113,7 @@ namespace BPCalculator
             }
 
         }
-      
+
         //Returns ideal blood pressure vaule for your age range
         public AgeRange AgeGroup
         {
@@ -170,6 +174,5 @@ namespace BPCalculator
                 }
             }
         }
-        
     }
 }
