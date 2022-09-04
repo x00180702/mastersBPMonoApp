@@ -33,16 +33,16 @@
             @if (ViewData.ModelState.IsValid)
             {
         <div class="form-group">
-            <label id="results">@Html.DisplayFor(model => model.BP.Category, new { htmlAttributes = new { @class = "form-control" } })</label>
+            <label id="results" name="calcResults" >@Html.DisplayFor(model => model.BP.Category, new { htmlAttributes = new { @class = "form-control" } })</label>
         </div>
                 <div class="form-group">
-                    <label id="results">@Html.DisplayFor(model => model.BP.AgeGroup, new { htmlAttributes = new { @class = "form-control" } })</label>
+                    <label id="results" name="AgeResults" >@Html.DisplayFor(model => model.BP.AgeGroup, new { htmlAttributes = new { @class = "form-control" } })</label>
                 </div>
                 <div class="form-group">
-                    <label id="resultsValue" style="display: block"><b>Mean Arterial Pressure:</b> @Html.DisplayFor(model => model.BP.mapCalulation, new { htmlAttributes = new { @class = "form-control" } })</label>
+                    <label id="resultsValue" name= "mapResults" style="display: block"><b>Mean Arterial Pressure:</b> @Html.DisplayFor(model => model.BP.mapCalulation, new { htmlAttributes = new { @class = "form-control" } })</label>
                 </div>
                 <div class="form-group">
-                    <label id="resultsValue" style="display:block"><b>Pulse Pressure:</b> @Html.DisplayFor(model => model.BP.pulsePressureCalulation, new { htmlAttributes = new { @class = "form-control" } })</label>
+                    <label id="resultsValue" name= "ppResults" style="display:block"><b>Pulse Pressure:</b> @Html.DisplayFor(model => model.BP.pulsePressureCalulation, new { htmlAttributes = new { @class = "form-control" } })</label>
                 </div>
             }
         </form>
