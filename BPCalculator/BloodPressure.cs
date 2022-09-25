@@ -24,7 +24,7 @@ namespace BPCalculator
         [Display(Name = "Average value for your age group [15-19] is 120/78")] AgeGroup1,
         [Display(Name = "Average value for your age group [20-24] is 120/79")] AgeGroup2,
         [Display(Name = "Average value for your age group [25-29] is 121/80")] AgeGroup3,
-        [Display(Name = "Average valuefor your age group [30-34] is 123/82")] AgeGroup4,
+        [Display(Name = "Average value for your age group [30-34] is 123/82")] AgeGroup4,
         [Display(Name = "Average value for your age group [35-39] is 124/83")] AgeGroup5,
         [Display(Name = "Average value for your age group [40-44] is 125/83")] AgeGroup6,
         [Display(Name = "Average value for your age group [45-49] is 127/84")] AgeGroup7,
